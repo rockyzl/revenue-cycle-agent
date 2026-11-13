@@ -1,6 +1,6 @@
 [project]
 name = "revenue-cycle-agent"
-version = "0.2.2"
+version = "0.3.0"
 description = "Live CMS cost inquiry agent with Vertex AI and UiPath human review"
 authors = [
     {name = "Lu Zhang", email = "zhanglu77@gmail.com"},
@@ -25,6 +25,8 @@ dependencies = [
     "opentelemetry-exporter-gcp-logging>=0.1.0,<2.0.0",
     "opentelemetry-resourcedetector-gcp>=1.6.0a0,<2",
     "httpx>=0.28,<1",
+    "google-cloud-firestore>=2.34.1",
+    "firebase-admin>=7.8.0",
 ]
 requires-python = ">=3.11,<3.14"
 

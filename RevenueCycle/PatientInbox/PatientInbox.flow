@@ -1,0 +1,3056 @@
+{
+  "id": "fbbb7f38-5570-4c47-897c-361bd52580fe",
+  "version": "1.9",
+  "name": "PatientInbox",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "core.trigger.manual",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "Manual trigger",
+        "icon": "play"
+      },
+      "model": {
+        "type": "bpmn:StartEvent",
+        "entryPointId": true
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the workflow.",
+          "source": "null",
+          "var": "output"
+        }
+      },
+      "inputs": {}
+    },
+    {
+      "id": "prepareDraft",
+      "type": "core.action.http.v2",
+      "typeVersion": "2.3",
+      "display": {
+        "label": "prepareDraft",
+        "icon": "app-window"
+      },
+      "model": {
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Intsvc.UnifiedHttpRequest",
+        "context": [
+          {
+            "name": "connectorKey",
+            "type": "string",
+            "value": "uipath-uipath-http"
+          },
+          {
+            "name": "objectName",
+            "type": "string",
+            "value": "http-request"
+          },
+          {
+            "name": "connection",
+            "type": "string",
+            "value": "<bindings.uipath-uipath-http connection>"
+          },
+          {
+            "name": "folderKey",
+            "type": "string",
+            "value": "<bindings.FolderKey>"
+          },
+          {
+            "name": "activityConfigurationVersion",
+            "type": "string",
+            "value": "v1"
+          },
+          {
+            "name": "metadata",
+            "body": {
+              "telemetryData": {
+                "connectorKey": "uipath-uipath-http",
+                "connectorName": "HTTP Request"
+              },
+              "inputMetadata": {},
+              "errorState": {
+                "hasError": true
+              }
+            },
+            "type": "json"
+          }
+        ],
+        "expansion": {
+          "processLevelVariables": [
+            {
+              "id": "prepareDraft.output",
+              "name": "output",
+              "type": "jsonSchema",
+              "elementId": "prepareDraft",
+              "custom": true
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "id": "prepareDraft.error",
+              "name": "error",
+              "type": "jsonSchema",
+              "elementId": "prepareDraft",
+              "custom": true
+            }
+          ],
+          "nodes": [
+            {
+              "id": "prepareDraft",
+              "type": "bpmn:SubProcess",
+              "replaceOriginal": true,
+              "data": {
+                "label": "{node.data.label}",
+                "isExpanded": true,
+                "model": {
+                  "serviceType": "BPMN.Variables",
+                  "subprocessVariables": {
+                    "inputOutputs": [
+                      {
+                        "id": "response",
+                        "name": "response",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      },
+                      {
+                        "id": "error",
+                        "name": "error",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      }
+                    ]
+                  },
+                  "outputs": [
+                    {
+                      "name": "output",
+                      "type": "jsonSchema",
+                      "source": "=vars.response",
+                      "var": "prepareDraft.output",
+                      "custom": true
+                    },
+                    {
+                      "name": "error",
+                      "type": "jsonSchema",
+                      "source": "=vars.error",
+                      "var": "prepareDraft.error",
+                      "custom": true
+                    }
+                  ]
+                }
+              },
+              "nodes": [
+                {
+                  "id": "_Implicit_StartEvent_prepareDraft",
+                  "type": "bpmn:StartEvent",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "HTTP Request Start"
+                  }
+                },
+                {
+                  "id": "_Implicit_HttpTask_prepareDraft",
+                  "type": "bpmn:SendTask",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "propagate": {
+                    "detail": true,
+                    "retry": {
+                      "condition": "node.data.inputs.retryCount > 0",
+                      "maxRetryCount": "node.data.inputs.retryCount",
+                      "retryBackoff": "node.data.inputs.timeout",
+                      "retryBackoffDefault": "PT1S",
+                      "retryAllErrors": "true",
+                      "retryBackoffType": "Static"
+                    }
+                  },
+                  "data": {
+                    "label": "{node.data.label}",
+                    "model": {
+                      "serviceType": "Intsvc.UnifiedHttpRequest",
+                      "context": [
+                        {
+                          "name": "connectorKey",
+                          "type": "string",
+                          "value": "uipath-uipath-http"
+                        },
+                        {
+                          "name": "objectName",
+                          "type": "string",
+                          "value": "http-request"
+                        },
+                        {
+                          "name": "connection",
+                          "type": "string",
+                          "value": "<bindings.uipath-uipath-http connection>"
+                        },
+                        {
+                          "name": "folderKey",
+                          "type": "string",
+                          "value": "<bindings.FolderKey>"
+                        },
+                        {
+                          "name": "activityConfigurationVersion",
+                          "type": "string",
+                          "value": "v1"
+                        },
+                        {
+                          "name": "metadata",
+                          "body": {
+                            "telemetryData": {
+                              "connectorKey": "uipath-uipath-http",
+                              "connectorName": "HTTP Request"
+                            },
+                            "inputMetadata": {},
+                            "errorState": {
+                              "hasError": true
+                            }
+                          },
+                          "type": "json"
+                        }
+                      ],
+                      "outputs": [
+                        {
+                          "name": "response",
+                          "type": "json",
+                          "source": "=response",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "_Implicit_Gateway_prepareDraft",
+                  "type": "bpmn:ExclusiveGateway",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "data": {
+                    "label": "Response branch",
+                    "defaultFlowId": "_Implicit_Edge__Implicit_Gateway_prepareDraft__Implicit_EndEvent_Default_prepareDraft"
+                  }
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "id": "_Implicit_EndEvent_{branchName}_prepareDraft",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "id": "_Implicit_EndEvent_Default_prepareDraft",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_EndEvent_Failure_prepareDraft",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Failure",
+                    "model": {
+                      "serviceType": "BPMN.Variables",
+                      "outputs": [
+                        {
+                          "name": "error",
+                          "type": "boolean",
+                          "source": "=true",
+                          "var": "error",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_BoundaryError_prepareDraft",
+                  "type": "bpmn:BoundaryEvent",
+                  "parentId": "prepareDraft",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Error",
+                    "cancelActivity": false,
+                    "attachedToId": "_Implicit_HttpTask_prepareDraft",
+                    "eventDefinition": {
+                      "type": "bpmn:ErrorEventDefinition",
+                      "id": "_Implicit_BoundaryError_prepareDraft_Error"
+                    },
+                    "model": {
+                      "outputs": [
+                        {
+                          "name": "Error",
+                          "type": "jsonSchema",
+                          "source": "=Error",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "id": "_Implicit_Edge__Implicit_StartEvent_prepareDraft__Implicit_HttpTask_prepareDraft",
+                  "source": "_Implicit_StartEvent_prepareDraft",
+                  "target": "_Implicit_HttpTask_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length === 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_prepareDraft__Implicit_EndEvent_Default_prepareDraft",
+                  "source": "_Implicit_HttpTask_prepareDraft",
+                  "target": "_Implicit_EndEvent_Default_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_prepareDraft__Implicit_Gateway_prepareDraft",
+                  "source": "_Implicit_HttpTask_prepareDraft",
+                  "target": "_Implicit_Gateway_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_prepareDraft__Implicit_EndEvent_{branchName}_prepareDraft",
+                  "source": "_Implicit_Gateway_prepareDraft",
+                  "target": "_Implicit_EndEvent_{branchName}_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "conditionExpression": "{branch.conditionExpression}",
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_prepareDraft__Implicit_EndEvent_Default_prepareDraft",
+                  "source": "_Implicit_Gateway_prepareDraft",
+                  "target": "_Implicit_EndEvent_Default_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_Edge__Implicit_BoundaryError_prepareDraft__Implicit_EndEvent_Failure_prepareDraft",
+                  "source": "_Implicit_BoundaryError_prepareDraft",
+                  "target": "_Implicit_EndEvent_Failure_prepareDraft",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                }
+              ]
+            },
+            {
+              "id": "_Implicit_PostSubprocessGateway_prepareDraft",
+              "type": "bpmn:ExclusiveGateway",
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "parentId": null,
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "data": {
+                "label": "Post-Subprocess Branch"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "id": "_Implicit_Edge_prepareDraft__Implicit_PostSubprocessGateway_prepareDraft",
+              "source": "prepareDraft",
+              "target": "_Implicit_PostSubprocessGateway_prepareDraft",
+              "type": "bpmn:SequenceFlow",
+              "data": {}
+            },
+            {
+              "forEach": "node.data.inputs.branches",
+              "condition": "node.data.inputs.branches.length > 0",
+              "matchOriginalEdgeByHandle": "branch-{branch.id}",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_prepareDraft",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "{branch.conditionExpression}",
+                "label": "{branch.name}"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_prepareDraft",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "label": "Default"
+              }
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "error",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_prepareDraft",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "=js:vars.prepareDraft.error || vars.prepareDraft.output?.statusCode >= 400",
+                "label": "Error"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length === 0 && !hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "prepareDraft",
+              "type": "bpmn:SequenceFlow"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "HTTP response object",
+          "source": "=response",
+          "var": "output",
+          "properties": {
+            "body": {
+              "type": "object",
+              "description": "Response body, deserialized by Integration Service",
+              "properties": {
+                "reply": {
+                  "type": "string"
+                },
+                "evidence": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "code": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "inputs": {
+        "branches": [],
+        "timeout": "PT4M",
+        "retryCount": 0,
+        "detail": {
+          "connector": "uipath-uipath-http",
+          "connectionId": "ImplicitConnection",
+          "connectionResourceId": null,
+          "connectionFolderKey": null,
+          "method": "POST",
+          "endpoint": "/http-request",
+          "bodyParameters": {
+            "authentication": "manual",
+            "method": "POST",
+            "url": "=js:`${\"https://revenue-cycle-agent-1038659864130.us-central1.run.app/portal/api/worker/\"}${$vars.start.output.inquiryId}/draft`",
+            "headers": {
+              "Authorization": "=js:`Bearer ${$vars.start.output.workerToken}`"
+            },
+            "body": {}
+          },
+          "configuration": "=jsonString:{\"essentialConfiguration\":{\"instanceParameters\":{\"connectorKey\":\"uipath-uipath-http\",\"objectName\":\"http-request\",\"httpMethod\":\"POST\",\"activityType\":\"Curated\",\"version\":\"1.0.0\"},\"objectName\":\"http-request\",\"operation\":\"create\",\"packageVersion\":\"1.0.0\",\"httpMethod\":\"POST\",\"path\":\"/http-request\",\"unifiedTypesCompatible\":true,\"savedJitInputFieldId\":\"in_http-request\"}}",
+          "uiPathActivityTypeId": "5c4cc855-b42a-37e6-b910-de8588998fce",
+          "errorState": {
+            "issues": []
+          },
+          "telemetryData": {
+            "connectorKey": "uipath-uipath-http",
+            "connectorName": "HTTP",
+            "operationType": "create",
+            "objectName": "http-request",
+            "objectDisplayName": "HTTP Request",
+            "primaryKeyName": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "staffReview",
+      "type": "uipath.human-in-the-loop.quick-form",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "staffReview",
+        "icon": "users"
+      },
+      "model": {
+        "type": "bpmn:UserTask",
+        "serviceType": "Actions.HITL"
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output",
+          "properties": {
+            "approvedReply": {
+              "type": "string"
+            },
+            "Action": {
+              "type": "string",
+              "enum": [
+                "Approve",
+                "Reject"
+              ],
+              "default": "Approve"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status",
+          "source": "=result.Action",
+          "var": "status",
+          "enum": [
+            "Approve",
+            "Reject"
+          ],
+          "default": "Approve"
+        }
+      },
+      "inputs": {
+        "title": {
+          "type": "jsExpression",
+          "expression": "`RC ${$vars.start.output.inquiryId}`",
+          "fieldType": "string"
+        },
+        "priority": "Low",
+        "recipient": {
+          "channels": [
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user",
+            "value": "zhanglu77@gmail.com"
+          }
+        },
+        "schema": {
+          "schemaId": "b2c7db76-589e-5c85-8932-66fc6df86178",
+          "fields": [
+            {
+              "id": "question",
+              "label": "患者消息（虚构演示）",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.prepareDraft.output.body.message"
+            },
+            {
+              "id": "evidence",
+              "label": "账单、保险记录与检查结果",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.prepareDraft.output.body.evidence"
+            },
+            {
+              "id": "approvedReply",
+              "label": "审核后回复",
+              "type": "string",
+              "direction": "inOut",
+              "binding": "vars.prepareDraft.output.body.reply",
+              "required": true,
+              "controlType": "textarea"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "approve",
+              "name": "Approve",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            },
+            {
+              "id": "reject",
+              "name": "Reject",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "publishReply",
+      "type": "core.action.http.v2",
+      "typeVersion": "2.3",
+      "display": {
+        "label": "publishReply",
+        "icon": "app-window"
+      },
+      "model": {
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Intsvc.UnifiedHttpRequest",
+        "context": [
+          {
+            "name": "connectorKey",
+            "type": "string",
+            "value": "uipath-uipath-http"
+          },
+          {
+            "name": "objectName",
+            "type": "string",
+            "value": "http-request"
+          },
+          {
+            "name": "connection",
+            "type": "string",
+            "value": "<bindings.uipath-uipath-http connection>"
+          },
+          {
+            "name": "folderKey",
+            "type": "string",
+            "value": "<bindings.FolderKey>"
+          },
+          {
+            "name": "activityConfigurationVersion",
+            "type": "string",
+            "value": "v1"
+          },
+          {
+            "name": "metadata",
+            "body": {
+              "telemetryData": {
+                "connectorKey": "uipath-uipath-http",
+                "connectorName": "HTTP Request"
+              },
+              "inputMetadata": {},
+              "errorState": {
+                "hasError": true
+              }
+            },
+            "type": "json"
+          }
+        ],
+        "expansion": {
+          "processLevelVariables": [
+            {
+              "id": "publishReply.output",
+              "name": "output",
+              "type": "jsonSchema",
+              "elementId": "publishReply",
+              "custom": true
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "id": "publishReply.error",
+              "name": "error",
+              "type": "jsonSchema",
+              "elementId": "publishReply",
+              "custom": true
+            }
+          ],
+          "nodes": [
+            {
+              "id": "publishReply",
+              "type": "bpmn:SubProcess",
+              "replaceOriginal": true,
+              "data": {
+                "label": "{node.data.label}",
+                "isExpanded": true,
+                "model": {
+                  "serviceType": "BPMN.Variables",
+                  "subprocessVariables": {
+                    "inputOutputs": [
+                      {
+                        "id": "response",
+                        "name": "response",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      },
+                      {
+                        "id": "error",
+                        "name": "error",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      }
+                    ]
+                  },
+                  "outputs": [
+                    {
+                      "name": "output",
+                      "type": "jsonSchema",
+                      "source": "=vars.response",
+                      "var": "publishReply.output",
+                      "custom": true
+                    },
+                    {
+                      "name": "error",
+                      "type": "jsonSchema",
+                      "source": "=vars.error",
+                      "var": "publishReply.error",
+                      "custom": true
+                    }
+                  ]
+                }
+              },
+              "nodes": [
+                {
+                  "id": "_Implicit_StartEvent_publishReply",
+                  "type": "bpmn:StartEvent",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "HTTP Request Start"
+                  }
+                },
+                {
+                  "id": "_Implicit_HttpTask_publishReply",
+                  "type": "bpmn:SendTask",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "propagate": {
+                    "detail": true,
+                    "retry": {
+                      "condition": "node.data.inputs.retryCount > 0",
+                      "maxRetryCount": "node.data.inputs.retryCount",
+                      "retryBackoff": "node.data.inputs.timeout",
+                      "retryBackoffDefault": "PT1S",
+                      "retryAllErrors": "true",
+                      "retryBackoffType": "Static"
+                    }
+                  },
+                  "data": {
+                    "label": "{node.data.label}",
+                    "model": {
+                      "serviceType": "Intsvc.UnifiedHttpRequest",
+                      "context": [
+                        {
+                          "name": "connectorKey",
+                          "type": "string",
+                          "value": "uipath-uipath-http"
+                        },
+                        {
+                          "name": "objectName",
+                          "type": "string",
+                          "value": "http-request"
+                        },
+                        {
+                          "name": "connection",
+                          "type": "string",
+                          "value": "<bindings.uipath-uipath-http connection>"
+                        },
+                        {
+                          "name": "folderKey",
+                          "type": "string",
+                          "value": "<bindings.FolderKey>"
+                        },
+                        {
+                          "name": "activityConfigurationVersion",
+                          "type": "string",
+                          "value": "v1"
+                        },
+                        {
+                          "name": "metadata",
+                          "body": {
+                            "telemetryData": {
+                              "connectorKey": "uipath-uipath-http",
+                              "connectorName": "HTTP Request"
+                            },
+                            "inputMetadata": {},
+                            "errorState": {
+                              "hasError": true
+                            }
+                          },
+                          "type": "json"
+                        }
+                      ],
+                      "outputs": [
+                        {
+                          "name": "response",
+                          "type": "json",
+                          "source": "=response",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "_Implicit_Gateway_publishReply",
+                  "type": "bpmn:ExclusiveGateway",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "data": {
+                    "label": "Response branch",
+                    "defaultFlowId": "_Implicit_Edge__Implicit_Gateway_publishReply__Implicit_EndEvent_Default_publishReply"
+                  }
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "id": "_Implicit_EndEvent_{branchName}_publishReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "id": "_Implicit_EndEvent_Default_publishReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_EndEvent_Failure_publishReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Failure",
+                    "model": {
+                      "serviceType": "BPMN.Variables",
+                      "outputs": [
+                        {
+                          "name": "error",
+                          "type": "boolean",
+                          "source": "=true",
+                          "var": "error",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_BoundaryError_publishReply",
+                  "type": "bpmn:BoundaryEvent",
+                  "parentId": "publishReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Error",
+                    "cancelActivity": false,
+                    "attachedToId": "_Implicit_HttpTask_publishReply",
+                    "eventDefinition": {
+                      "type": "bpmn:ErrorEventDefinition",
+                      "id": "_Implicit_BoundaryError_publishReply_Error"
+                    },
+                    "model": {
+                      "outputs": [
+                        {
+                          "name": "Error",
+                          "type": "jsonSchema",
+                          "source": "=Error",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "id": "_Implicit_Edge__Implicit_StartEvent_publishReply__Implicit_HttpTask_publishReply",
+                  "source": "_Implicit_StartEvent_publishReply",
+                  "target": "_Implicit_HttpTask_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length === 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_publishReply__Implicit_EndEvent_Default_publishReply",
+                  "source": "_Implicit_HttpTask_publishReply",
+                  "target": "_Implicit_EndEvent_Default_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_publishReply__Implicit_Gateway_publishReply",
+                  "source": "_Implicit_HttpTask_publishReply",
+                  "target": "_Implicit_Gateway_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_publishReply__Implicit_EndEvent_{branchName}_publishReply",
+                  "source": "_Implicit_Gateway_publishReply",
+                  "target": "_Implicit_EndEvent_{branchName}_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "conditionExpression": "{branch.conditionExpression}",
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_publishReply__Implicit_EndEvent_Default_publishReply",
+                  "source": "_Implicit_Gateway_publishReply",
+                  "target": "_Implicit_EndEvent_Default_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_Edge__Implicit_BoundaryError_publishReply__Implicit_EndEvent_Failure_publishReply",
+                  "source": "_Implicit_BoundaryError_publishReply",
+                  "target": "_Implicit_EndEvent_Failure_publishReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                }
+              ]
+            },
+            {
+              "id": "_Implicit_PostSubprocessGateway_publishReply",
+              "type": "bpmn:ExclusiveGateway",
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "parentId": null,
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "data": {
+                "label": "Post-Subprocess Branch"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "id": "_Implicit_Edge_publishReply__Implicit_PostSubprocessGateway_publishReply",
+              "source": "publishReply",
+              "target": "_Implicit_PostSubprocessGateway_publishReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {}
+            },
+            {
+              "forEach": "node.data.inputs.branches",
+              "condition": "node.data.inputs.branches.length > 0",
+              "matchOriginalEdgeByHandle": "branch-{branch.id}",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_publishReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "{branch.conditionExpression}",
+                "label": "{branch.name}"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_publishReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "label": "Default"
+              }
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "error",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_publishReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "=js:vars.publishReply.error || vars.publishReply.output?.statusCode >= 400",
+                "label": "Error"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length === 0 && !hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "publishReply",
+              "type": "bpmn:SequenceFlow"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "HTTP response object",
+          "source": "=response",
+          "var": "output",
+          "properties": {
+            "body": {
+              "type": "object",
+              "description": "Response body, deserialized by Integration Service",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "inquiryId": {
+                  "type": "string"
+                }
+              }
+            },
+            "code": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "inputs": {
+        "branches": [],
+        "timeout": "PT15M",
+        "retryCount": 0,
+        "detail": {
+          "connector": "uipath-uipath-http",
+          "connectionId": "ImplicitConnection",
+          "connectionResourceId": null,
+          "connectionFolderKey": null,
+          "method": "POST",
+          "endpoint": "/http-request",
+          "bodyParameters": {
+            "authentication": "manual",
+            "method": "POST",
+            "url": "=js:`${\"https://revenue-cycle-agent-1038659864130.us-central1.run.app/portal/api/worker/\"}${$vars.start.output.inquiryId}/finish`",
+            "headers": {
+              "Authorization": "=js:`Bearer ${$vars.start.output.workerToken}`"
+            },
+            "body": {
+              "decision": "approve",
+              "reply": "=js:$vars.staffReview.output.approvedReply"
+            }
+          },
+          "configuration": "=jsonString:{\"essentialConfiguration\":{\"instanceParameters\":{\"connectorKey\":\"uipath-uipath-http\",\"objectName\":\"http-request\",\"httpMethod\":\"POST\",\"activityType\":\"Curated\",\"version\":\"1.0.0\"},\"objectName\":\"http-request\",\"operation\":\"create\",\"packageVersion\":\"1.0.0\",\"httpMethod\":\"POST\",\"path\":\"/http-request\",\"unifiedTypesCompatible\":true,\"savedJitInputFieldId\":\"in_http-request\"}}",
+          "uiPathActivityTypeId": "5c4cc855-b42a-37e6-b910-de8588998fce",
+          "errorState": {
+            "issues": []
+          },
+          "telemetryData": {
+            "connectorKey": "uipath-uipath-http",
+            "connectorName": "HTTP",
+            "operationType": "create",
+            "objectName": "http-request",
+            "objectDisplayName": "HTTP Request",
+            "primaryKeyName": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "core.control.end",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "End",
+        "icon": "circle-check"
+      },
+      "model": {
+        "type": "bpmn:EndEvent"
+      },
+      "inputs": {},
+      "outputs": {
+        "status": {
+          "type": "string",
+          "description": "",
+          "source": {
+            "type": "jsExpression",
+            "expression": "$vars.publishReply.output.body.status",
+            "fieldType": "string"
+          },
+          "var": "status"
+        }
+      }
+    },
+    {
+      "id": "closeWithoutReply",
+      "type": "core.action.http.v2",
+      "typeVersion": "2.3",
+      "display": {
+        "label": "closeWithoutReply",
+        "icon": "app-window"
+      },
+      "model": {
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Intsvc.UnifiedHttpRequest",
+        "context": [
+          {
+            "name": "connectorKey",
+            "type": "string",
+            "value": "uipath-uipath-http"
+          },
+          {
+            "name": "objectName",
+            "type": "string",
+            "value": "http-request"
+          },
+          {
+            "name": "connection",
+            "type": "string",
+            "value": "<bindings.uipath-uipath-http connection>"
+          },
+          {
+            "name": "folderKey",
+            "type": "string",
+            "value": "<bindings.FolderKey>"
+          },
+          {
+            "name": "activityConfigurationVersion",
+            "type": "string",
+            "value": "v1"
+          },
+          {
+            "name": "metadata",
+            "body": {
+              "telemetryData": {
+                "connectorKey": "uipath-uipath-http",
+                "connectorName": "HTTP Request"
+              },
+              "inputMetadata": {},
+              "errorState": {
+                "hasError": true
+              }
+            },
+            "type": "json"
+          }
+        ],
+        "expansion": {
+          "processLevelVariables": [
+            {
+              "id": "closeWithoutReply.output",
+              "name": "output",
+              "type": "jsonSchema",
+              "elementId": "closeWithoutReply",
+              "custom": true
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "id": "closeWithoutReply.error",
+              "name": "error",
+              "type": "jsonSchema",
+              "elementId": "closeWithoutReply",
+              "custom": true
+            }
+          ],
+          "nodes": [
+            {
+              "id": "closeWithoutReply",
+              "type": "bpmn:SubProcess",
+              "replaceOriginal": true,
+              "data": {
+                "label": "{node.data.label}",
+                "isExpanded": true,
+                "model": {
+                  "serviceType": "BPMN.Variables",
+                  "subprocessVariables": {
+                    "inputOutputs": [
+                      {
+                        "id": "response",
+                        "name": "response",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      },
+                      {
+                        "id": "error",
+                        "name": "error",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      }
+                    ]
+                  },
+                  "outputs": [
+                    {
+                      "name": "output",
+                      "type": "jsonSchema",
+                      "source": "=vars.response",
+                      "var": "closeWithoutReply.output",
+                      "custom": true
+                    },
+                    {
+                      "name": "error",
+                      "type": "jsonSchema",
+                      "source": "=vars.error",
+                      "var": "closeWithoutReply.error",
+                      "custom": true
+                    }
+                  ]
+                }
+              },
+              "nodes": [
+                {
+                  "id": "_Implicit_StartEvent_closeWithoutReply",
+                  "type": "bpmn:StartEvent",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "HTTP Request Start"
+                  }
+                },
+                {
+                  "id": "_Implicit_HttpTask_closeWithoutReply",
+                  "type": "bpmn:SendTask",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "propagate": {
+                    "detail": true,
+                    "retry": {
+                      "condition": "node.data.inputs.retryCount > 0",
+                      "maxRetryCount": "node.data.inputs.retryCount",
+                      "retryBackoff": "node.data.inputs.timeout",
+                      "retryBackoffDefault": "PT1S",
+                      "retryAllErrors": "true",
+                      "retryBackoffType": "Static"
+                    }
+                  },
+                  "data": {
+                    "label": "{node.data.label}",
+                    "model": {
+                      "serviceType": "Intsvc.UnifiedHttpRequest",
+                      "context": [
+                        {
+                          "name": "connectorKey",
+                          "type": "string",
+                          "value": "uipath-uipath-http"
+                        },
+                        {
+                          "name": "objectName",
+                          "type": "string",
+                          "value": "http-request"
+                        },
+                        {
+                          "name": "connection",
+                          "type": "string",
+                          "value": "<bindings.uipath-uipath-http connection>"
+                        },
+                        {
+                          "name": "folderKey",
+                          "type": "string",
+                          "value": "<bindings.FolderKey>"
+                        },
+                        {
+                          "name": "activityConfigurationVersion",
+                          "type": "string",
+                          "value": "v1"
+                        },
+                        {
+                          "name": "metadata",
+                          "body": {
+                            "telemetryData": {
+                              "connectorKey": "uipath-uipath-http",
+                              "connectorName": "HTTP Request"
+                            },
+                            "inputMetadata": {},
+                            "errorState": {
+                              "hasError": true
+                            }
+                          },
+                          "type": "json"
+                        }
+                      ],
+                      "outputs": [
+                        {
+                          "name": "response",
+                          "type": "json",
+                          "source": "=response",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "_Implicit_Gateway_closeWithoutReply",
+                  "type": "bpmn:ExclusiveGateway",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "data": {
+                    "label": "Response branch",
+                    "defaultFlowId": "_Implicit_Edge__Implicit_Gateway_closeWithoutReply__Implicit_EndEvent_Default_closeWithoutReply"
+                  }
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "id": "_Implicit_EndEvent_{branchName}_closeWithoutReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "id": "_Implicit_EndEvent_Default_closeWithoutReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_EndEvent_Failure_closeWithoutReply",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Failure",
+                    "model": {
+                      "serviceType": "BPMN.Variables",
+                      "outputs": [
+                        {
+                          "name": "error",
+                          "type": "boolean",
+                          "source": "=true",
+                          "var": "error",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_BoundaryError_closeWithoutReply",
+                  "type": "bpmn:BoundaryEvent",
+                  "parentId": "closeWithoutReply",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Error",
+                    "cancelActivity": false,
+                    "attachedToId": "_Implicit_HttpTask_closeWithoutReply",
+                    "eventDefinition": {
+                      "type": "bpmn:ErrorEventDefinition",
+                      "id": "_Implicit_BoundaryError_closeWithoutReply_Error"
+                    },
+                    "model": {
+                      "outputs": [
+                        {
+                          "name": "Error",
+                          "type": "jsonSchema",
+                          "source": "=Error",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "id": "_Implicit_Edge__Implicit_StartEvent_closeWithoutReply__Implicit_HttpTask_closeWithoutReply",
+                  "source": "_Implicit_StartEvent_closeWithoutReply",
+                  "target": "_Implicit_HttpTask_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length === 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_closeWithoutReply__Implicit_EndEvent_Default_closeWithoutReply",
+                  "source": "_Implicit_HttpTask_closeWithoutReply",
+                  "target": "_Implicit_EndEvent_Default_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_closeWithoutReply__Implicit_Gateway_closeWithoutReply",
+                  "source": "_Implicit_HttpTask_closeWithoutReply",
+                  "target": "_Implicit_Gateway_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_closeWithoutReply__Implicit_EndEvent_{branchName}_closeWithoutReply",
+                  "source": "_Implicit_Gateway_closeWithoutReply",
+                  "target": "_Implicit_EndEvent_{branchName}_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "conditionExpression": "{branch.conditionExpression}",
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_closeWithoutReply__Implicit_EndEvent_Default_closeWithoutReply",
+                  "source": "_Implicit_Gateway_closeWithoutReply",
+                  "target": "_Implicit_EndEvent_Default_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_Edge__Implicit_BoundaryError_closeWithoutReply__Implicit_EndEvent_Failure_closeWithoutReply",
+                  "source": "_Implicit_BoundaryError_closeWithoutReply",
+                  "target": "_Implicit_EndEvent_Failure_closeWithoutReply",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                }
+              ]
+            },
+            {
+              "id": "_Implicit_PostSubprocessGateway_closeWithoutReply",
+              "type": "bpmn:ExclusiveGateway",
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "parentId": null,
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "data": {
+                "label": "Post-Subprocess Branch"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "id": "_Implicit_Edge_closeWithoutReply__Implicit_PostSubprocessGateway_closeWithoutReply",
+              "source": "closeWithoutReply",
+              "target": "_Implicit_PostSubprocessGateway_closeWithoutReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {}
+            },
+            {
+              "forEach": "node.data.inputs.branches",
+              "condition": "node.data.inputs.branches.length > 0",
+              "matchOriginalEdgeByHandle": "branch-{branch.id}",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_closeWithoutReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "{branch.conditionExpression}",
+                "label": "{branch.name}"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_closeWithoutReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "label": "Default"
+              }
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "error",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_closeWithoutReply",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "=js:vars.closeWithoutReply.error || vars.closeWithoutReply.output?.statusCode >= 400",
+                "label": "Error"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length === 0 && !hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "closeWithoutReply",
+              "type": "bpmn:SequenceFlow"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "HTTP response object",
+          "source": "=response",
+          "var": "output",
+          "properties": {
+            "body": {
+              "type": "object",
+              "description": "Response body, deserialized by Integration Service",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "inquiryId": {
+                  "type": "string"
+                }
+              }
+            },
+            "code": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "inputs": {
+        "branches": [],
+        "timeout": "PT15M",
+        "retryCount": 0,
+        "detail": {
+          "connector": "uipath-uipath-http",
+          "connectionId": "ImplicitConnection",
+          "connectionResourceId": null,
+          "connectionFolderKey": null,
+          "method": "POST",
+          "endpoint": "/http-request",
+          "bodyParameters": {
+            "authentication": "manual",
+            "method": "POST",
+            "url": "=js:`${\"https://revenue-cycle-agent-1038659864130.us-central1.run.app/portal/api/worker/\"}${$vars.start.output.inquiryId}/finish`",
+            "headers": {
+              "Authorization": "=js:`Bearer ${$vars.start.output.workerToken}`"
+            },
+            "body": {
+              "decision": "reject",
+              "reply": "Rejected by reviewer"
+            }
+          },
+          "configuration": "=jsonString:{\"essentialConfiguration\":{\"instanceParameters\":{\"connectorKey\":\"uipath-uipath-http\",\"objectName\":\"http-request\",\"httpMethod\":\"POST\",\"activityType\":\"Curated\",\"version\":\"1.0.0\"},\"objectName\":\"http-request\",\"operation\":\"create\",\"packageVersion\":\"1.0.0\",\"httpMethod\":\"POST\",\"path\":\"/http-request\",\"unifiedTypesCompatible\":true,\"savedJitInputFieldId\":\"in_http-request\"}}",
+          "uiPathActivityTypeId": "5c4cc855-b42a-37e6-b910-de8588998fce",
+          "errorState": {
+            "issues": []
+          },
+          "telemetryData": {
+            "connectorKey": "uipath-uipath-http",
+            "connectorName": "HTTP",
+            "operationType": "create",
+            "objectName": "http-request",
+            "objectDisplayName": "HTTP Request",
+            "primaryKeyName": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "end2",
+      "type": "core.control.end",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "End",
+        "icon": "circle-check"
+      },
+      "model": {
+        "type": "bpmn:EndEvent"
+      },
+      "inputs": {},
+      "outputs": {
+        "status": {
+          "type": "string",
+          "description": "",
+          "source": {
+            "type": "jsExpression",
+            "expression": "$vars.closeWithoutReply.output.body.status",
+            "fieldType": "string"
+          },
+          "var": "status"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_0",
+      "sourceNodeId": "start",
+      "sourcePort": "output",
+      "targetNodeId": "prepareDraft",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_1",
+      "sourceNodeId": "prepareDraft",
+      "sourcePort": "default",
+      "targetNodeId": "staffReview",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_2",
+      "sourceNodeId": "staffReview",
+      "sourcePort": "outcome-approve",
+      "targetNodeId": "publishReply",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_3",
+      "sourceNodeId": "publishReply",
+      "sourcePort": "default",
+      "targetNodeId": "end",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_4",
+      "sourceNodeId": "staffReview",
+      "sourcePort": "outcome-reject",
+      "targetNodeId": "closeWithoutReply",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_5",
+      "sourceNodeId": "closeWithoutReply",
+      "sourcePort": "default",
+      "targetNodeId": "end2",
+      "targetPort": "input"
+    }
+  ],
+  "definitions": [
+    {
+      "nodeType": "core.trigger.manual",
+      "version": "1.0.0",
+      "category": "trigger",
+      "tags": [
+        "trigger",
+        "start",
+        "manual"
+      ],
+      "sortOrder": 40,
+      "display": {
+        "label": "Manual trigger",
+        "icon": "play",
+        "shape": "circle",
+        "iconBackground": "linear-gradient(225deg, #FAFAFB 0%, #ECEDEF 100%)",
+        "iconBackgroundDark": "linear-gradient(225deg, #526069 0%, rgba(50, 60, 66, 0.6) 100%)"
+      },
+      "handleConfiguration": [
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "output",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:StartEvent",
+        "entryPointId": true
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the workflow.",
+          "source": "null",
+          "var": "output"
+        }
+      }
+    },
+    {
+      "nodeType": "core.action.http.v2",
+      "version": "2.3",
+      "category": "connector",
+      "description": "HTTP request with managed authentication",
+      "tags": [
+        "connector",
+        "http",
+        "api",
+        "rest",
+        "request"
+      ],
+      "sortOrder": 35,
+      "supportsErrorHandling": true,
+      "display": {
+        "label": "HTTP Request",
+        "icon": "app-window"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input",
+              "label": ""
+            }
+          ]
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "branch-{item.id}",
+              "type": "source",
+              "handleType": "output",
+              "label": "{item.name}",
+              "repeat": "inputs.branches"
+            },
+            {
+              "id": "default",
+              "type": "source",
+              "handleType": "output",
+              "label": ""
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "type": "source",
+              "handleType": "output",
+              "visible": "{inputs.errorHandlingEnabled}",
+              "constraints": {
+                "maxConnections": 1
+              }
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "debug": {
+        "runtime": "bpmnEngine"
+      },
+      "model": {
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Intsvc.UnifiedHttpRequest",
+        "context": [
+          {
+            "name": "connectorKey",
+            "type": "string",
+            "value": "uipath-uipath-http"
+          },
+          {
+            "name": "objectName",
+            "type": "string",
+            "value": "http-request"
+          },
+          {
+            "name": "connection",
+            "type": "string",
+            "value": "<bindings.uipath-uipath-http connection>"
+          },
+          {
+            "name": "folderKey",
+            "type": "string",
+            "value": "<bindings.FolderKey>"
+          },
+          {
+            "name": "activityConfigurationVersion",
+            "type": "string",
+            "value": "v1"
+          },
+          {
+            "name": "metadata",
+            "body": {
+              "telemetryData": {
+                "connectorKey": "uipath-uipath-http",
+                "connectorName": "HTTP Request"
+              },
+              "inputMetadata": {},
+              "errorState": {
+                "hasError": true
+              }
+            },
+            "type": "json"
+          }
+        ],
+        "expansion": {
+          "processLevelVariables": [
+            {
+              "id": "{nodeId}.output",
+              "name": "output",
+              "type": "jsonSchema",
+              "elementId": "{nodeId}",
+              "custom": true
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "id": "{nodeId}.error",
+              "name": "error",
+              "type": "jsonSchema",
+              "elementId": "{nodeId}",
+              "custom": true
+            }
+          ],
+          "nodes": [
+            {
+              "id": "{nodeId}",
+              "type": "bpmn:SubProcess",
+              "replaceOriginal": true,
+              "data": {
+                "label": "{node.data.label}",
+                "isExpanded": true,
+                "model": {
+                  "serviceType": "BPMN.Variables",
+                  "subprocessVariables": {
+                    "inputOutputs": [
+                      {
+                        "id": "response",
+                        "name": "response",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      },
+                      {
+                        "id": "error",
+                        "name": "error",
+                        "type": "jsonSchema",
+                        "variableType": "inputOutput"
+                      }
+                    ]
+                  },
+                  "outputs": [
+                    {
+                      "name": "output",
+                      "type": "jsonSchema",
+                      "source": "=vars.response",
+                      "var": "{nodeId}.output",
+                      "custom": true
+                    },
+                    {
+                      "name": "error",
+                      "type": "jsonSchema",
+                      "source": "=vars.error",
+                      "var": "{nodeId}.error",
+                      "custom": true
+                    }
+                  ]
+                }
+              },
+              "nodes": [
+                {
+                  "id": "_Implicit_StartEvent_{nodeId}",
+                  "type": "bpmn:StartEvent",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "HTTP Request Start"
+                  }
+                },
+                {
+                  "id": "_Implicit_HttpTask_{nodeId}",
+                  "type": "bpmn:SendTask",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "propagate": {
+                    "detail": true,
+                    "retry": {
+                      "condition": "node.data.inputs.retryCount > 0",
+                      "maxRetryCount": "node.data.inputs.retryCount",
+                      "retryBackoff": "node.data.inputs.timeout",
+                      "retryBackoffDefault": "PT1S",
+                      "retryAllErrors": "true",
+                      "retryBackoffType": "Static"
+                    }
+                  },
+                  "data": {
+                    "label": "{node.data.label}",
+                    "model": {
+                      "serviceType": "Intsvc.UnifiedHttpRequest",
+                      "context": [
+                        {
+                          "name": "connectorKey",
+                          "type": "string",
+                          "value": "uipath-uipath-http"
+                        },
+                        {
+                          "name": "objectName",
+                          "type": "string",
+                          "value": "http-request"
+                        },
+                        {
+                          "name": "connection",
+                          "type": "string",
+                          "value": "<bindings.uipath-uipath-http connection>"
+                        },
+                        {
+                          "name": "folderKey",
+                          "type": "string",
+                          "value": "<bindings.FolderKey>"
+                        },
+                        {
+                          "name": "activityConfigurationVersion",
+                          "type": "string",
+                          "value": "v1"
+                        },
+                        {
+                          "name": "metadata",
+                          "body": {
+                            "telemetryData": {
+                              "connectorKey": "uipath-uipath-http",
+                              "connectorName": "HTTP Request"
+                            },
+                            "inputMetadata": {},
+                            "errorState": {
+                              "hasError": true
+                            }
+                          },
+                          "type": "json"
+                        }
+                      ],
+                      "outputs": [
+                        {
+                          "name": "response",
+                          "type": "json",
+                          "source": "=response",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "id": "_Implicit_Gateway_{nodeId}",
+                  "type": "bpmn:ExclusiveGateway",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "data": {
+                    "label": "Response branch",
+                    "defaultFlowId": "_Implicit_Edge__Implicit_Gateway_{nodeId}__Implicit_EndEvent_Default_{nodeId}"
+                  }
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "id": "_Implicit_EndEvent_{branchName}_{nodeId}",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "id": "_Implicit_EndEvent_Default_{nodeId}",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_EndEvent_Failure_{nodeId}",
+                  "type": "bpmn:EndEvent",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Failure",
+                    "model": {
+                      "serviceType": "BPMN.Variables",
+                      "outputs": [
+                        {
+                          "name": "error",
+                          "type": "boolean",
+                          "source": "=true",
+                          "var": "error",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_BoundaryError_{nodeId}",
+                  "type": "bpmn:BoundaryEvent",
+                  "parentId": "{nodeId}",
+                  "position": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "data": {
+                    "label": "Error",
+                    "cancelActivity": false,
+                    "attachedToId": "_Implicit_HttpTask_{nodeId}",
+                    "eventDefinition": {
+                      "type": "bpmn:ErrorEventDefinition",
+                      "id": "_Implicit_BoundaryError_{nodeId}_Error"
+                    },
+                    "model": {
+                      "outputs": [
+                        {
+                          "name": "Error",
+                          "type": "jsonSchema",
+                          "source": "=Error",
+                          "var": "response",
+                          "internal": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "id": "_Implicit_Edge__Implicit_StartEvent_{nodeId}__Implicit_HttpTask_{nodeId}",
+                  "source": "_Implicit_StartEvent_{nodeId}",
+                  "target": "_Implicit_HttpTask_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length === 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_{nodeId}__Implicit_EndEvent_Default_{nodeId}",
+                  "source": "_Implicit_HttpTask_{nodeId}",
+                  "target": "_Implicit_EndEvent_Default_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_HttpTask_{nodeId}__Implicit_Gateway_{nodeId}",
+                  "source": "_Implicit_HttpTask_{nodeId}",
+                  "target": "_Implicit_Gateway_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                },
+                {
+                  "forEach": "node.data.inputs.branches",
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_{nodeId}__Implicit_EndEvent_{branchName}_{nodeId}",
+                  "source": "_Implicit_Gateway_{nodeId}",
+                  "target": "_Implicit_EndEvent_{branchName}_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "conditionExpression": "{branch.conditionExpression}",
+                    "label": "{branch.name}"
+                  }
+                },
+                {
+                  "condition": "node.data.inputs.branches.length > 0",
+                  "id": "_Implicit_Edge__Implicit_Gateway_{nodeId}__Implicit_EndEvent_Default_{nodeId}",
+                  "source": "_Implicit_Gateway_{nodeId}",
+                  "target": "_Implicit_EndEvent_Default_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {
+                    "label": "Default"
+                  }
+                },
+                {
+                  "condition": "hasEdgeFromHandle('error')",
+                  "id": "_Implicit_Edge__Implicit_BoundaryError_{nodeId}__Implicit_EndEvent_Failure_{nodeId}",
+                  "source": "_Implicit_BoundaryError_{nodeId}",
+                  "target": "_Implicit_EndEvent_Failure_{nodeId}",
+                  "type": "bpmn:SequenceFlow",
+                  "data": {}
+                }
+              ]
+            },
+            {
+              "id": "_Implicit_PostSubprocessGateway_{nodeId}",
+              "type": "bpmn:ExclusiveGateway",
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "parentId": null,
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "data": {
+                "label": "Post-Subprocess Branch"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "condition": "(node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')) && originalEdges.length > 0",
+              "id": "_Implicit_Edge_{nodeId}__Implicit_PostSubprocessGateway_{nodeId}",
+              "source": "{nodeId}",
+              "target": "_Implicit_PostSubprocessGateway_{nodeId}",
+              "type": "bpmn:SequenceFlow",
+              "data": {}
+            },
+            {
+              "forEach": "node.data.inputs.branches",
+              "condition": "node.data.inputs.branches.length > 0",
+              "matchOriginalEdgeByHandle": "branch-{branch.id}",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_{nodeId}",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "{branch.conditionExpression}",
+                "label": "{branch.name}"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length > 0 || hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_{nodeId}",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "label": "Default"
+              }
+            },
+            {
+              "condition": "hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "error",
+              "preserveEdgeId": true,
+              "source": "_Implicit_PostSubprocessGateway_{nodeId}",
+              "type": "bpmn:SequenceFlow",
+              "data": {
+                "conditionExpression": "=js:vars.{nodeId}.error || vars.{nodeId}.output?.statusCode >= 400",
+                "label": "Error"
+              }
+            },
+            {
+              "condition": "node.data.inputs.branches.length === 0 && !hasEdgeFromHandle('error')",
+              "matchOriginalEdgeByHandle": "default",
+              "preserveEdgeId": true,
+              "source": "{nodeId}",
+              "type": "bpmn:SequenceFlow"
+            }
+          ]
+        }
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "conditionExpression": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "timeout": {
+            "type": "string",
+            "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$",
+            "errorMessage": {
+              "pattern": "Timeout must be in ISO 8601 duration format (e.g., PT15M, PT1H, P1D)"
+            }
+          },
+          "retryCount": {
+            "type": "number"
+          }
+        }
+      },
+      "inputDefaults": {
+        "branches": [],
+        "timeout": "PT15M",
+        "retryCount": 0
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "HTTP response object",
+          "source": "=response",
+          "var": "output"
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "form": {
+        "id": "http-v2-properties",
+        "title": "HTTP Request",
+        "metadata": {
+          "propertyPanel": {
+            "tabs": [
+              {
+                "id": "branching",
+                "title": "Branching"
+              }
+            ],
+            "sectionTabs": {
+              "branches": "branching",
+              "advanced": "advanced"
+            }
+          }
+        },
+        "sections": [
+          {
+            "id": "http-config",
+            "title": "Configuration",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.dapHttpToolbar",
+                "type": "custom",
+                "component": "dap-http-toolbar",
+                "label": ""
+              },
+              {
+                "label": "",
+                "name": "inputs.detail",
+                "type": "custom",
+                "component": "dap-config",
+                "componentProps": {
+                  "connectorDetail": {
+                    "isAppActivity": false,
+                    "packageId": 196648,
+                    "svgIconUrl": "icons/0dad78c9d04c245b126d8edb4c451aa8a0d395d34731cf5702441f6284c70ccc.svg",
+                    "displayName": "HTTP Request",
+                    "assemblyQualifiedName": "UiPath.IntegrationService.Activities.Runtime.Activities.ConnectorActivity, UiPath.IntegrationService.Activities.Runtime, Version=1.22.0.0, Culture=neutral, PublicKeyToken=null",
+                    "description": "Use HTTP requests to interact with APIs via the selected connector and connection configuration.",
+                    "category": "",
+                    "activityColor": "#E56D5C",
+                    "configuration": "{\"connectorKey\":\"uipath-uipath-http\",\"objectName\":\"http-request\",\"httpMethod\":\"POST\",\"activityType\":\"Curated\",\"version\":\"1.0.0\"}",
+                    "uiPathActivityTypeId": "5c4cc855-b42a-37e6-b910-de8588998fce",
+                    "isExperimental": false,
+                    "helpUrlTemplate": "https://docs.uipath.com/{0}/activities/other/latest/integration-service/uipath-uipath-http-HTTP-Request",
+                    "isEnabled": true,
+                    "targetPlatform": "CrossPlatform",
+                    "isAdvanced": false,
+                    "isRestricted": false,
+                    "tags": [
+                      ""
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "branches",
+            "title": "Branches",
+            "collapsible": true,
+            "defaultExpanded": false,
+            "fields": [
+              {
+                "name": "inputs.branches",
+                "type": "custom",
+                "component": "http-branch-editor",
+                "label": "Response branches",
+                "description": "Define conditional branches based on response status or properties",
+                "componentProps": {
+                  "expressionValidationFields": [
+                    {
+                      "subPath": "conditionExpression",
+                      "validationMode": "expression",
+                      "expectedType": "boolean"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "advanced",
+            "title": "Advanced",
+            "collapsible": true,
+            "defaultExpanded": false,
+            "fields": [
+              {
+                "name": "inputs.timeout",
+                "type": "text",
+                "label": "Timeout",
+                "description": "ISO 8601 duration format (for example, PT15M for 15 minutes, PT1H for 1 hour)"
+              },
+              {
+                "name": "inputs.retryCount",
+                "type": "number",
+                "label": "Retry count",
+                "description": "Number of times to retry on failure"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeType": "uipath.human-in-the-loop.quick-form",
+      "version": "1.0",
+      "category": "human-task",
+      "tags": [
+        "human-task",
+        "hitl",
+        "human-in-the-loop",
+        "quick-form",
+        "approval"
+      ],
+      "sortOrder": 27,
+      "display": {
+        "label": "Quick Form",
+        "icon": "users",
+        "shape": "square"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ],
+          "visible": true
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "completed",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:UserTask",
+        "serviceType": "Actions.HITL"
+      },
+      "inputDefaults": {
+        "schema": {
+          "fields": [],
+          "outcomes": [
+            {
+              "id": "submit",
+              "name": "Submit",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            }
+          ]
+        },
+        "recipient": {
+          "channels": [
+            "Email",
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "group"
+          }
+        }
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output"
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status (completed, cancelled, timeout)",
+          "source": "=result.Action",
+          "var": "status"
+        }
+      },
+      "runtimeConstraints": {
+        "exclude": [
+          "api-function"
+        ]
+      },
+      "description": "Fast inline approvals with inline debug",
+      "form": {
+        "id": "hitl-quick-form-properties",
+        "title": "Quick Form Task Configuration",
+        "sections": [
+          {
+            "id": "delivery",
+            "title": "Task delivery",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.recipient",
+                "type": "custom",
+                "component": "hitl-channel-selector",
+                "label": "Delivery Channels",
+                "description": "Select where the task should be sent"
+              }
+            ]
+          },
+          {
+            "id": "schema",
+            "title": "Schema",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.schema",
+                "type": "custom",
+                "component": "hitl-schema-editor",
+                "label": "Task Schema",
+                "description": "Define the input and output parameters for this task"
+              }
+            ]
+          },
+          {
+            "id": "additional-properties",
+            "title": "Additional properties",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.title",
+                "type": "text",
+                "label": "Task title"
+              },
+              {
+                "name": "inputs.priority",
+                "type": "select",
+                "label": "Priority",
+                "options": [
+                  {
+                    "label": "Low",
+                    "value": "Low"
+                  },
+                  {
+                    "label": "Medium",
+                    "value": "Medium"
+                  },
+                  {
+                    "label": "High",
+                    "value": "High"
+                  }
+                ]
+              },
+              {
+                "name": "inputs.labels",
+                "type": "text",
+                "label": "Labels",
+                "placeholder": "Comma-separated (e.g. finance,approval)"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeType": "core.control.end",
+      "version": "1.0.0",
+      "category": "control-flow",
+      "tags": [
+        "control-flow",
+        "end",
+        "finish",
+        "complete"
+      ],
+      "sortOrder": 20,
+      "display": {
+        "label": "End",
+        "icon": "circle-check",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        }
+      ],
+      "model": {
+        "type": "bpmn:EndEvent"
+      }
+    }
+  ],
+  "variables": {
+    "globals": [
+      {
+        "id": "inquiryId",
+        "name": "inquiryId",
+        "direction": "in",
+        "type": "string",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "workerToken",
+        "name": "workerToken",
+        "direction": "in",
+        "type": "string",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "status",
+        "name": "status",
+        "direction": "out",
+        "type": "string"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "start.output",
+        "type": "object",
+        "description": "Data passed when manually triggering the workflow.",
+        "binding": {
+          "nodeId": "start",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "prepareDraft.output",
+        "type": "object",
+        "description": "HTTP response object",
+        "binding": {
+          "nodeId": "prepareDraft",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "prepareDraft.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "required": [
+            "code",
+            "message",
+            "detail",
+            "category",
+            "status"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code as a string"
+            },
+            "message": {
+              "type": "string",
+              "description": "High-level error message"
+            },
+            "detail": {
+              "type": "string",
+              "description": "Detailed error description"
+            },
+            "category": {
+              "type": "string",
+              "description": "Error category"
+            },
+            "status": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          },
+          "additionalProperties": false
+        },
+        "binding": {
+          "nodeId": "prepareDraft",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "staffReview.output",
+        "type": "object",
+        "description": "Task result data",
+        "binding": {
+          "nodeId": "staffReview",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "staffReview.status",
+        "type": "string",
+        "description": "Task completion status",
+        "binding": {
+          "nodeId": "staffReview",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "publishReply.output",
+        "type": "object",
+        "description": "HTTP response object",
+        "binding": {
+          "nodeId": "publishReply",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "publishReply.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "required": [
+            "code",
+            "message",
+            "detail",
+            "category",
+            "status"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code as a string"
+            },
+            "message": {
+              "type": "string",
+              "description": "High-level error message"
+            },
+            "detail": {
+              "type": "string",
+              "description": "Detailed error description"
+            },
+            "category": {
+              "type": "string",
+              "description": "Error category"
+            },
+            "status": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          },
+          "additionalProperties": false
+        },
+        "binding": {
+          "nodeId": "publishReply",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "end.status",
+        "type": "string",
+        "binding": {
+          "nodeId": "end",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "closeWithoutReply.output",
+        "type": "object",
+        "description": "HTTP response object",
+        "binding": {
+          "nodeId": "closeWithoutReply",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "closeWithoutReply.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "schema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "required": [
+            "code",
+            "message",
+            "detail",
+            "category",
+            "status"
+          ],
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Error code as a string"
+            },
+            "message": {
+              "type": "string",
+              "description": "High-level error message"
+            },
+            "detail": {
+              "type": "string",
+              "description": "Detailed error description"
+            },
+            "category": {
+              "type": "string",
+              "description": "Error category"
+            },
+            "status": {
+              "type": "integer",
+              "description": "HTTP status code"
+            }
+          },
+          "additionalProperties": false
+        },
+        "binding": {
+          "nodeId": "closeWithoutReply",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "end2.status",
+        "type": "string",
+        "binding": {
+          "nodeId": "end2",
+          "outputId": "status"
+        }
+      }
+    ],
+    "variableUpdates": {}
+  },
+  "bindings": [
+    {
+      "id": "bUipathuipathhttpConnection",
+      "name": "uipath-uipath-http connection",
+      "type": "string",
+      "resource": "connection",
+      "resourceKey": "",
+      "default": "ImplicitConnection",
+      "propertyAttribute": "ConnectionId"
+    },
+    {
+      "id": "bUipathuipathhttpFolderKey",
+      "name": "FolderKey",
+      "type": "string",
+      "resource": "connection",
+      "resourceKey": "",
+      "propertyAttribute": "FolderKey"
+    }
+  ],
+  "solutionId": "",
+  "projectId": "",
+  "runtime": "maestro",
+  "layout": {
+    "nodes": {
+      "start": {
+        "position": {
+          "x": 256,
+          "y": 144
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "prepareDraft": {
+        "position": {
+          "x": 448,
+          "y": 144
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "staffReview": {
+        "position": {
+          "x": 640,
+          "y": 128
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "publishReply": {
+        "position": {
+          "x": 832,
+          "y": 128
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "end": {
+        "position": {
+          "x": 1024,
+          "y": 112
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "closeWithoutReply": {
+        "position": {
+          "x": 832,
+          "y": 320
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "end2": {
+        "position": {
+          "x": 1024,
+          "y": 304
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      }
+    }
+  },
+  "subflows": {}
+}

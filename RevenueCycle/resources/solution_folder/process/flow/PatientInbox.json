@@ -1,0 +1,58 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "PatientInbox",
+    "kind": "process",
+    "type": "flow",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "projectKey": "8e089832-5fd8-4d60-b2ef-fda888526be3",
+    "isOverridable": true,
+    "dependencies": [
+      {
+        "kind": "package",
+        "name": "PatientInbox"
+      }
+    ],
+    "runtimeDependencies": [
+      {
+        "bindingType": "connection",
+        "bindingKey": "",
+        "bindingValues": {
+          "connectionId": {
+            "defaultValue": "ImplicitConnection",
+            "isExpression": false
+          }
+        },
+        "bindingMetadata": {
+          "activityName": "prepareDraft",
+          "bindingsVersion": "2.2",
+          "connector": "uipath-uipath-http",
+          "useConnectionService": "true"
+        },
+        "resourceKind": "Connection",
+        "resourceType": "uipath-uipath-http"
+      }
+    ],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "type": "Flow",
+      "name": "PatientInbox",
+      "package": {
+        "key": "0fba1d87-c5e0-4393-b49a-b4db332c48ca"
+      },
+      "inputArguments": "{}",
+      "targetFrameworkValue": "Portable",
+      "retentionAction": "Delete",
+      "retentionPeriod": 30,
+      "staleRetentionAction": "Delete",
+      "staleRetentionPeriod": 180
+    },
+    "locks": [],
+    "key": "7203e6d2-ae0c-4da4-8e55-a483109f103f",
+    "files": []
+  }
+}

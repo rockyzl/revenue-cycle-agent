@@ -1,0 +1,23 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "PatientInbox",
+    "kind": "package",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "projectKey": "8e089832-5fd8-4d60-b2ef-fda888526be3",
+    "isOverridable": true,
+    "dependencies": [],
+    "runtimeDependencies": [],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "name": "PatientInbox"
+    },
+    "locks": [],
+    "key": "0fba1d87-c5e0-4393-b49a-b4db332c48ca",
+    "files": []
+  }
+}

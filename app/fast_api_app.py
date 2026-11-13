@@ -44,6 +44,7 @@ from app.agent import MODE
 from app.app_utils.a2a import add_a2a_routes
 from app.app_utils.telemetry import setup_telemetry
 from app.cost_api import router as cost_router
+from app.portal.api import router as portal_router
 from app.workflow import GraphInput, ReviewDecision, demo_graph
 
 # Optional upstream telemetry; off for this small local prototype. The current
@@ -65,6 +66,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(cost_router)
+app.include_router(portal_router)
+
+
+@app.middleware("http")
+async def private_portal_responses(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith('/portal/api'):
+        response.headers['Cache-Control'] = 'no-store'
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Referrer-Policy'] = 'same-origin'
+    return response
+
 app.mount(
     "/assets",
     StaticFiles(directory=Path(__file__).parent / "static" / "assets"),
@@ -87,6 +100,11 @@ _sessions: dict[str, asyncio.Lock] = {}
 
 @app.get("/", response_class=HTMLResponse)
 def demo_page():
+    return (Path(__file__).parent / "static" / "portal.html").read_text()
+
+
+@app.get("/cms", response_class=HTMLResponse)
+def cms_page():
     return (Path(__file__).parent / "static" / "index.html").read_text()
 
 

@@ -239,3 +239,11 @@ artifacts/*
 *.db-*
 
 !artifacts/uipath-cloud-verification.json
+
+# UiPath generated local cache and per-user deployment state
+**/userProfile/
+**/.flow-sdk/connectors/
+**/.flow-sdk/connectors-local/
+**/.flow-sdk/bindings.json
+RevenueCycle/out/
+**/.flow-debug/
