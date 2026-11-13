@@ -13,8 +13,7 @@ Original reference files and full licenses are in references/upstream. Source co
 
 Added live CMS retrieval, a separate cost-inquiry agent/graph, deterministic amount
 and citation checks, specialist routing, a workflow UI with tool traces, editable
-human review, and six real-model evaluation cases. The earlier fabricated billing
-records remain separate legacy fixtures and are not the main demo's data source.
+human review, and six real-model evaluation cases. This workbench remains at `/cms`; its source is public aggregates. The newer patient portal described below uses a separate, explicitly synthetic personal-record database.
 
 Data: [CMS Medicare Outpatient Hospitals by Provider and Service](https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service),
 data year 2024, dataset UUID `771e94a2-cd8f-4702-a9d7-8f777f363938`.
@@ -32,3 +31,10 @@ cloud job and Action Center Quick Form. It uses the installed UiPath Python SDK'
 The evidence snapshot is checkpointed in UiPath; completion is read back from
 Action Center before accepting a decision. Public artifacts distinguish an API
 completion smoke check from actual human review.
+
+
+## Patient portal and Maestro Flow added 2026-11-13
+
+The new root experience adds real Identity Platform login, Firestore account/patient/proxy mapping, synthetic personal bills and insurance/payment events, authorized read-only agent tools, separate patient/reviewer roles, and UiPath Maestro approval/rejection callbacks. The editable Flow uses the official `@uipath/maestro-builder-sdk` with the UiPath CLI 1.205.0 compile/validate/format/package/deploy workflow. Generated solution and Flow files are retained alongside their TypeScript source; UiPath's SDK/runtime is not original project code.
+
+Authoring references: [UiPath's official Maestro Flow skill](https://github.com/UiPath/skills/tree/main/skills/uipath-maestro-flow) and [solution skill](https://github.com/UiPath/skills/tree/main/skills/uipath-solution). Patient records and questions were authored for demonstration. This is AI-assisted independent project work. Source-level and runtime evidence are distinguished in docs/verification-2026-11-13.md. No hospital integration or clinical validation is claimed.

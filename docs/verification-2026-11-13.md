@@ -28,3 +28,6 @@ Approval/rejection ran on Cloud Run revision revenue-cycle-agent-00005-bb4 (imag
 The six public CMS/Vertex cases and legacy coded-agent Action Center smoke run remain in artifacts/eval-cms-live.json and artifacts/uipath-cloud-verification.json. They do not substitute for the new patient-inbox verification. CMS averages remain separate from synthetic personal records.
 
 Full debug exports and credentials are excluded from version control. This public record omits worker credentials, OAuth tokens and private cloud authentication material.
+
+
+Final browser smoke: v5 revision `revenue-cycle-agent-00006-zgm` served the updated page; role switching loaded Anna's three authorized bills, cross-patient lookup returned the expected denial, and the previously approved reply survived redeployment. The session was logged out after verification. GitHub CI passed on implementation commit `245a4a7c8a46230140f793b1c732543416a69b28`: https://github.com/rockyzl/revenue-cycle-agent/actions/runs/43522867177.

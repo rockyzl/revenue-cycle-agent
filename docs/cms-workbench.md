@@ -1,4 +1,6 @@
-# Revenue Cycle Agent
+# Earlier CMS workbench — historical design note
+
+> This describes the earlier `/cms` workbench and legacy coded-agent entry point. The current root patient portal, confidential backend OAuth and actual Maestro Flow are documented in [the current README](../README.md). Statements below about in-memory sessions and a browser-only review apply to this earlier workbench, not the new portal.
 
 **A cost inquiry workbench with live CMS data, real model tool calls, and human review.**
 
@@ -8,7 +10,7 @@ or return the draft, then download the resulting review record.
 
 **[Open the live demo](https://revenue-cycle-agent-1038659864130.us-central1.run.app)**
 
-[中文项目说明](PROJECT_BRIEF_ZH.md) · [Data and code provenance](PROVENANCE.md) · [Deployment](DEPLOYMENT_PLAN.md)
+[中文项目说明](../PROJECT_BRIEF_ZH.md) · [Data and code provenance](../PROVENANCE.md) · [Deployment](../DEPLOYMENT_PLAN.md)
 
 ## See the workflow
 
@@ -74,11 +76,11 @@ BILLING_MODE=vertex uv run python scripts/evaluate_cms.py
 26 local unit/integration checks passed, including missing data, unsupported
 amounts, incorrect API filters, editable human review, and bounded public API input.
 Six live CMS + Vertex cases passed their smoke checks; full results are in
-[`artifacts/eval-cms-live.json`](artifacts/eval-cms-live.json).
+[`artifacts/eval-cms-live.json`](../artifacts/eval-cms-live.json).
 The deployed Cloud Run inquiry/review and a UiPath cloud job through Action Center
 suspension and successful resumption were also verified. The UiPath test completed
 the task through its API, **not a human review**; evidence is in
-[`artifacts/uipath-cloud-verification.json`](artifacts/uipath-cloud-verification.json).
+[`artifacts/uipath-cloud-verification.json`](../artifacts/uipath-cloud-verification.json).
 These checks do not establish production accuracy or full semantic faithfulness.
 
 ## Legacy coded-agent orchestration (not Maestro Flow)
@@ -147,5 +149,5 @@ evidence for the new six-case live workflow.
 
 Adapted from [Google agents-cli](https://github.com/google/agents-cli) (Apache-2.0)
 and [UiPath's official LangGraph examples](https://github.com/UiPath/uipath-langchain-python)
-(MIT). See [PROVENANCE.md](PROVENANCE.md), [LICENSE](LICENSE) and
-[THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt) for pins, changes and notices.
+(MIT). See [PROVENANCE.md](../PROVENANCE.md), [LICENSE](../LICENSE) and
+[THIRD_PARTY_NOTICES.txt](../THIRD_PARTY_NOTICES.txt) for pins, changes and notices.
