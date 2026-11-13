@@ -1,0 +1,100 @@
+{
+  "url": "https://revenue-cycle-agent-1038659864130.us-central1.run.app",
+  "health": true,
+  "model": "gemini-3.8-flash",
+  "state": {
+    "session_id": "c3433ed7d1be48659a2d68ba0818f7c7",
+    "question": "Can you tell me exactly how much I personally will owe after Medicare?",
+    "provider_ccn": "240010",
+    "apc_code": "5072",
+    "draft": {
+      "intent": "personal_estimate",
+      "summary": "Cannot determine exact personal out-of-pocket costs from 2024 CMS aggregate data; specialist review requested for personalized estimate.",
+      "response": "We cannot provide your exact personal out-of-pocket liability using CMS data, which reflect historical 2024 hospital averages rather than an individualized quote or bill (source: cms:2024:240010:5072, cms:definitions:v1). Personal amounts cannot be calculated by subtracting averages.\n\nFor APC 5072 at Mayo Clinic Hospital Rochester, 2024 averages were:\n- Average submitted charge: $7,825.60 (billed charge; not what you owe)\n- Average Medicare allowed: $1,618.39 (total Medicare and patient share combined)\n- Average Medicare payment: $1,280.16 (amount paid directly by Medicare)\n\nAn exact personal estimate would require your secondary or supplemental insurance details, deductible status, and scheduled procedure codes. A specialist review should be requested for a personalized estimate.",
+      "evidence_ids": [
+        "cms:2024:240010:5072",
+        "cms:definitions:v1"
+      ],
+      "missing_information": [
+        "Patient Medicare deductible and coinsurance status",
+        "Supplemental insurance or secondary coverage details (e.g., Medigap)",
+        "Specific scheduled services, dates, and physician billing components"
+      ],
+      "needs_specialist": true
+    },
+    "tool_trace": [
+      {
+        "tool": "lookup_cms_costs",
+        "input": {
+          "apc_code": "5072",
+          "provider_ccn": "240010"
+        },
+        "output": {
+          "source_id": "cms:2024:240010:5072",
+          "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+          "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+          "data_year": 2024,
+          "retrieved_at": "2026-11-13T20:21:24.845457+00:00",
+          "provider_ccn": "240010",
+          "apc_code": "5072",
+          "data_kind": "Real public hospital/service aggregates; not patient-level data",
+          "found": true,
+          "provider": "Mayo Clinic Hospital Rochester",
+          "service": "Level 2 Excision/ Biopsy/ Incision and Drainage",
+          "city": "Rochester",
+          "state": "MN",
+          "beneficiaries": "2105",
+          "services": "2366",
+          "average_submitted_charge": "7825.60",
+          "average_medicare_allowed": "1618.39",
+          "average_medicare_payment": "1280.16"
+        }
+      },
+      {
+        "tool": "get_cost_definitions",
+        "input": {},
+        "output": {
+          "source_id": "cms:definitions:v1",
+          "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+          "definitions": {
+            "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+            "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+            "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+          },
+          "project_rules": [
+            "These are historical 2024 aggregates, not current quotes or patient balances.",
+            "Never calculate a person's liability from the difference between two averages.",
+            "Blank or absent CMS values are unavailable, not zero.",
+            "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+            "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+          ]
+        }
+      }
+    ],
+    "checks": {
+      "tools_completed": true,
+      "reference_ids": true,
+      "quoted_amounts_match": true,
+      "historical_year_stated": true,
+      "human_review_required": true
+    },
+    "routing": {
+      "queue": "Cost specialist",
+      "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+    },
+    "status": "awaiting_review",
+    "paused": true,
+    "runtime": {
+      "mode": "vertex",
+      "model": "gemini-3.8-flash",
+      "data": "Live CMS API",
+      "orchestration": "LangGraph"
+    }
+  },
+  "review": {
+    "decision": "approve",
+    "comment": "Reviewed public-data limits in deployed smoke check.",
+    "edited_response": null
+  },
+  "status": "reviewed_draft"
+}

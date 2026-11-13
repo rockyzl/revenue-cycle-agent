@@ -6,6 +6,8 @@ An agent reads a public cost question, queries CMS hospital/service records,
 explains the evidence and pauses for a reviewer. The reviewer can edit, approve
 or return the draft, then download the resulting review record.
 
+**[Open the live demo](https://revenue-cycle-agent-1038659864130.us-central1.run.app)**
+
 [中文项目说明](PROJECT_BRIEF_ZH.md) · [Data and code provenance](PROVENANCE.md) · [Deployment](DEPLOYMENT_PLAN.md)
 
 ## See the workflow
@@ -69,27 +71,55 @@ BILLING_MODE=replay uv run pytest tests/unit tests/integration -q
 BILLING_MODE=vertex uv run python scripts/evaluate_cms.py
 ```
 
-23 local unit/integration checks passed, including missing data, unsupported
+26 local unit/integration checks passed, including missing data, unsupported
 amounts, incorrect API filters, editable human review, and bounded public API input.
 Six live CMS + Vertex cases passed their smoke checks; full results are in
 [`artifacts/eval-cms-live.json`](artifacts/eval-cms-live.json).
+The deployed Cloud Run inquiry/review and a UiPath cloud job through Action Center
+suspension and successful resumption were also verified. The UiPath test completed
+the task through its API, **not a human review**; evidence is in
+[`artifacts/uipath-cloud-verification.json`](artifacts/uipath-cloud-verification.json).
 These checks do not establish production accuracy or full semantic faithfulness.
 
-## UiPath
+## UiPath cloud orchestration
 
-`langgraph.json` exports `cost_workflow` for the UiPath Python/LangGraph SDK.
+`uipath_cost_review` is a deployed UiPath coded-agent workflow. It calls the
+Cloud Run agent, stores the evidence snapshot in UiPath state, creates a native
+Action Center Quick Form, and suspends until that task is completed. It then
+records the approved or rejected draft. Google credentials stay in Cloud Run.
 
-```bash
-BILLING_MODE=vertex uv run uipath init --no-agents-md-override
-BILLING_MODE=vertex uv run uipath run cost_workflow --file examples/cms-inquiry.json
-uv run uipath pack
+```mermaid
+flowchart LR
+    U[UiPath cloud job] --> G[Cloud Run: Vertex AI + CMS]
+    G --> S[Evidence snapshot in UiPath state]
+    S --> A[Action Center Quick Form]
+    A --> P[Cloud job suspended]
+    P --> R[Review completion resumes job]
+    R --> D[Recorded reviewed draft]
 ```
 
-The earlier synthetic workflow's local SDK suspend/resume and packaging were
-verified. The new cost graph uses the same interrupt pattern. Automation Cloud
-and Action Center integration is being configured; it is not yet verified.
-Set `UIPATH_REVIEW_APP` and `UIPATH_REVIEW_FOLDER` only after configuring an
-appropriate Action Center app. Account creation alone does not prove orchestration.
+Authenticate to your own UiPath tenant, update `DEMO_URL` in `app/uipath_cloud.py`
+if hosting your own service, then package and publish:
+
+```bash
+uv run uipath auth
+uv run uipath init --no-agents-md-override
+uv run uipath pack
+uv run uipath publish --my-workspace
+uv run uipath invoke uipath_cost_review '{"case_id":"explain"}'
+```
+
+The browser workbench uses its own LangGraph review UI. Launch the UiPath entry
+point through your authenticated UiPath console/CLI to use Action Center. The
+public website does not hold UiPath credentials or create tasks in the owner's
+account. UiPath keeps the evidence snapshot during review, so the cloud review
+does not depend on the browser session surviving a Cloud Run restart.
+
+Quick Forms use the [official SDK](https://uipath.github.io/uipath-python/core/tasks/)
+and [Action Center schema](https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/quick-form-tasks).
+No separate Action App deployment is required. The existing `cost_workflow` entry
+point runs model/tools directly and needs its own model credentials; use
+`uipath_cost_review` for the verified Google Cloud integration.
 
 ## Layout
 
@@ -97,6 +127,7 @@ appropriate Action Center app. Account creation alone does not prove orchestrati
 |---|---|
 | `app/cms.py` | Live CMS retrieval and source definitions |
 | `app/cost_workflow.py` | Model/tools, checks, routing and human pause/resume |
+| `app/uipath_cloud.py` | UiPath cloud job, evidence snapshot and Action Center review |
 | `app/cost_api.py` | Six bounded sample cases and review API |
 | `app/static/` | Workbench UI with tool traces and editable review |
 | `scripts/evaluate_cms.py` | Live end-to-end smoke cases |

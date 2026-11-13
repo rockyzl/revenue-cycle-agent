@@ -4,7 +4,7 @@
     "entryPoints": [
         {
             "filePath": "billing_workflow",
-            "uniqueId": "c2c84e08-b9fc-415c-af0e-14ef35f49686",
+            "uniqueId": "e847746a-274d-4674-9f24-1eb8fbe5c748",
             "type": "agent",
             "input": {
                 "type": "object",
@@ -165,7 +165,7 @@
         },
         {
             "filePath": "cost_workflow",
-            "uniqueId": "f627579a-71f1-414d-aaff-4d20aa066342",
+            "uniqueId": "28cf7123-629f-4ea3-b01b-ef187cf261f5",
             "type": "agent",
             "input": {
                 "type": "object",
@@ -291,6 +291,120 @@
                     },
                     {
                         "source": "human_review",
+                        "target": "__end__",
+                        "label": null
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "uipath_cost_review",
+            "uniqueId": "c8235651-b565-4617-9fc5-91c6aa57256b",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "case_id": {
+                        "default": "explain",
+                        "enum": [
+                            "explain",
+                            "benchmark",
+                            "personal",
+                            "dispute",
+                            "unavailable",
+                            "missing"
+                        ],
+                        "title": "Case Id",
+                        "type": "string"
+                    }
+                },
+                "required": []
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "evidence_snapshot": {
+                        "additionalProperties": true,
+                        "title": "Evidence Snapshot",
+                        "type": "object"
+                    },
+                    "action_task": {
+                        "additionalProperties": true,
+                        "title": "Action Task",
+                        "type": "object"
+                    },
+                    "review": {
+                        "additionalProperties": true,
+                        "title": "Review",
+                        "type": "object"
+                    },
+                    "approved_response": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "default": "pending",
+                        "title": "Status",
+                        "type": "string"
+                    }
+                },
+                "required": []
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "__start__",
+                        "name": "__start__",
+                        "type": "__start__",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "call_vertex_agent",
+                        "name": "call_vertex_agent",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "create_action_center_review",
+                        "name": "create_action_center_review",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "wait_for_human",
+                        "name": "wait_for_human",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "__end__",
+                        "name": "__end__",
+                        "type": "__end__",
+                        "subgraph": null,
+                        "metadata": {}
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "__start__",
+                        "target": "call_vertex_agent",
+                        "label": null
+                    },
+                    {
+                        "source": "call_vertex_agent",
+                        "target": "create_action_center_review",
+                        "label": null
+                    },
+                    {
+                        "source": "create_action_center_review",
+                        "target": "wait_for_human",
+                        "label": null
+                    },
+                    {
+                        "source": "wait_for_human",
                         "target": "__end__",
                         "label": null
                     }

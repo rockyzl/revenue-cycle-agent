@@ -78,7 +78,7 @@ def health() -> dict[str, str]:
         "status": "ok",
         "mode": MODE,
         "data": "CMS public aggregates",
-        "uipath_cloud": "pending",
+        "uipath_cloud": "separate_cloud_workflow",
     }
 
 

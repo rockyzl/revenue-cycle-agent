@@ -1,5 +1,10 @@
 # Cloud deployment
 
+Live service: https://revenue-cycle-agent-1038659864130.us-central1.run.app
+
+Verified a real inquiry and review on November 13, 2026; see
+[cloud-verification.json](artifacts/cloud-verification.json).
+
 The demo runs a FastAPI container on Google Cloud Run in `us-central1`, with
 Vertex AI credentials supplied by a dedicated runtime service account. Public
 requests select one of six authored cases; they cannot supply arbitrary prompts.
@@ -30,6 +35,8 @@ or token into the container. `.dockerignore` permits only build and app files.
 `.gcloudignore` excludes credentials, state, artifacts and development files.
 
 Validate the deployed health endpoint, a real inquiry, tool/source/amount checks,
-and review resumption. UIPath cloud configuration is a separate integration:
-it requires the organization, tenant, folder, deployment and a compatible review
-app. The public UI states its actual integration status.
+and review resumption. UiPath is deployed separately using its authenticated CLI.
+The `uipath_cost_review` entry point calls the bounded Cloud Run endpoint, stores
+an evidence snapshot, and waits on an Action Center Quick Form. No Google secret
+is copied to UiPath, and the public Cloud Run service contains no UiPath token.
+The form schema ships with the coded agent; no Action App is required.

@@ -22,3 +22,13 @@ Definitions are paraphrased from the [official CMS data dictionary](https://data
 Each tool result records the actual source URL, provider/APC, year and retrieval time.
 The demo provider is Mayo Clinic Hospital Rochester (CCN 240010); no affiliation
 or endorsement is implied. Example inquiry text is authored, not actual patient correspondence.
+
+## Cross-cloud review added 2026-11-13
+
+`app/uipath_cloud.py` connects the deployed Google Cloud agent to a real UiPath
+cloud job and Action Center Quick Form. It uses the installed UiPath Python SDK's
+`create_quickform_async`, `WaitTask`, and `retrieve_async` primitives and the
+[official Quick Form field schema](https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/quick-form-tasks).
+The evidence snapshot is checkpointed in UiPath; completion is read back from
+Action Center before accepting a decision. Public artifacts distinguish an API
+completion smoke check from actual human review.

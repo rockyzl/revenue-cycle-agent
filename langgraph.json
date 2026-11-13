@@ -4,7 +4,8 @@
   ],
   "graphs": {
     "billing_workflow": "./app/workflow.py:graph",
-    "cost_workflow": "./app/cost_workflow.py:graph"
+    "cost_workflow": "./app/cost_workflow.py:graph",
+    "uipath_cost_review": "./app/uipath_cloud.py:graph"
   },
   "python_version": "3.12"
 }

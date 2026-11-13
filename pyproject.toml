@@ -1,7 +1,7 @@
 [project]
 name = "revenue-cycle-agent"
-version = "0.1.0"
-description = "Synthetic billing inbox agent adapted from Google and UiPath samples"
+version = "0.2.2"
+description = "Live CMS cost inquiry agent with Vertex AI and UiPath human review"
 authors = [
     {name = "Lu Zhang", email = "zhanglu77@gmail.com"},
 ]

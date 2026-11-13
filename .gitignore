@@ -237,3 +237,5 @@ artifacts/*
 !artifacts/cloud-verification.json
 *.db
 *.db-*
+
+!artifacts/uipath-cloud-verification.json

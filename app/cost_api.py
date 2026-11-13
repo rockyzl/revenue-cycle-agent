@@ -74,7 +74,7 @@ def config():
         "data_year": DATA_YEAR,
         "dataset_url": DATASET_PAGE,
         "cases": CASES,
-        "uipath_cloud": "Not connected; developer account setup pending",
+        "uipath_cloud": "Separate UiPath cloud workflow with Action Center review",
     }
 
 

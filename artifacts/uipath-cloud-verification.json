@@ -1,0 +1,82 @@
+{
+  "verified_at": "2026-11-13T20:32:23.907263+00:00",
+  "package_version": "0.2.1",
+  "entrypoint": "uipath_cost_review",
+  "job_key": "fcab1463-42ed-4f0f-afe3-6d11dd777605",
+  "case_id": "personal",
+  "review_method": "Automated API completion for integration testing, not human review",
+  "state_transitions": [
+    "Suspended",
+    "Successful"
+  ],
+  "action_task_id": 100319756,
+  "action_task_type": "QuickFormTask",
+  "checks": {
+    "tools_completed": true,
+    "reference_ids": true,
+    "quoted_amounts_match": true,
+    "historical_year_stated": true,
+    "human_review_required": true
+  },
+  "routing": {
+    "queue": "Cost specialist",
+    "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+  },
+  "tool_trace": [
+    {
+      "tool": "lookup_cms_costs",
+      "input": {
+        "apc_code": "5072",
+        "provider_ccn": "240010"
+      },
+      "output": {
+        "source_id": "cms:2024:240010:5072",
+        "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+        "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+        "data_year": 2024,
+        "retrieved_at": "2026-11-13T20:32:09.343842+00:00",
+        "provider_ccn": "240010",
+        "apc_code": "5072",
+        "data_kind": "Real public hospital/service aggregates; not patient-level data",
+        "found": true,
+        "provider": "Mayo Clinic Hospital Rochester",
+        "service": "Level 2 Excision/ Biopsy/ Incision and Drainage",
+        "city": "Rochester",
+        "state": "MN",
+        "beneficiaries": "2105",
+        "services": "2366",
+        "average_submitted_charge": "7825.60",
+        "average_medicare_allowed": "1618.39",
+        "average_medicare_payment": "1280.16"
+      }
+    },
+    {
+      "tool": "get_cost_definitions",
+      "input": {},
+      "output": {
+        "source_id": "cms:definitions:v1",
+        "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+        "definitions": {
+          "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+          "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+          "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+        },
+        "project_rules": [
+          "These are historical 2024 aggregates, not current quotes or patient balances.",
+          "Never calculate a person's liability from the difference between two averages.",
+          "Blank or absent CMS values are unavailable, not zero.",
+          "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+          "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+        ]
+      }
+    }
+  ],
+  "status": "reviewed_draft",
+  "review": {
+    "decision": "approve",
+    "comment": "Automated cloud integration smoke check; no human or financial approval.",
+    "task_id": 100319756
+  },
+  "approved_response": "We cannot determine an exact personal out-of-pocket amount from public CMS data. The figures below are historical 2024 hospital averages for Mayo Clinic Hospital Rochester (APC 5072), not a personal bill, price quote, or coverage decision:\n\n- 2024 Average Submitted Charge: $7,825.60\n- 2024 Average Medicare Allowed Amount: $1,618.39\n- 2024 Average Medicare Payment: $1,280.16\n\nAn individual's liability cannot be derived by subtracting these averages. Your actual costs will depend on whether you have met your annual Part B deductible, whether you have supplemental (Medigap) coverage, and the exact clinical services performed. \n\nA revenue cycle or financial counseling specialist would need to review your insurance benefits and scheduled service details to provide an individualized estimate.",
+  "evidence_preserved": true
+}
