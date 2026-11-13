@@ -1,0 +1,301 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "billing_workflow",
+            "uniqueId": "c2c84e08-b9fc-415c-af0e-14ef35f49686",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "maxLength": 2000,
+                        "minLength": 1,
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "bill_id": {
+                        "maxLength": 40,
+                        "pattern": "^DEMO-[A-Z0-9]+$",
+                        "title": "Bill Id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "message",
+                    "bill_id"
+                ]
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "triage": {
+                        "additionalProperties": true,
+                        "title": "Triage",
+                        "type": "object"
+                    },
+                    "mode": {
+                        "default": "replay",
+                        "title": "Mode",
+                        "type": "string"
+                    },
+                    "status": {
+                        "default": "pending",
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "evidence_verified": {
+                        "default": false,
+                        "title": "Evidence Verified",
+                        "type": "boolean"
+                    },
+                    "tool_calls": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Tool Calls",
+                        "type": "array"
+                    },
+                    "review": {
+                        "additionalProperties": true,
+                        "title": "Review",
+                        "type": "object"
+                    }
+                },
+                "required": []
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "__start__",
+                        "name": "__start__",
+                        "type": "__start__",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "classify",
+                        "name": "classify",
+                        "type": "node",
+                        "subgraph": {
+                            "nodes": [
+                                {
+                                    "id": "__start__",
+                                    "name": "__start__",
+                                    "type": "__start__",
+                                    "subgraph": null,
+                                    "metadata": {}
+                                },
+                                {
+                                    "id": "synthetic_replay",
+                                    "name": "synthetic_replay",
+                                    "type": "node",
+                                    "subgraph": null,
+                                    "metadata": {}
+                                },
+                                {
+                                    "id": "__end__",
+                                    "name": "__end__",
+                                    "type": "__end__",
+                                    "subgraph": null,
+                                    "metadata": {}
+                                }
+                            ],
+                            "edges": [
+                                {
+                                    "source": "__start__",
+                                    "target": "synthetic_replay",
+                                    "label": null
+                                },
+                                {
+                                    "source": "synthetic_replay",
+                                    "target": "__end__",
+                                    "label": null
+                                }
+                            ]
+                        },
+                        "metadata": {}
+                    },
+                    {
+                        "id": "verify_evidence",
+                        "name": "verify_evidence",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "human_review",
+                        "name": "human_review",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "__end__",
+                        "name": "__end__",
+                        "type": "__end__",
+                        "subgraph": null,
+                        "metadata": {}
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "__start__",
+                        "target": "classify",
+                        "label": null
+                    },
+                    {
+                        "source": "classify",
+                        "target": "verify_evidence",
+                        "label": null
+                    },
+                    {
+                        "source": "verify_evidence",
+                        "target": "human_review",
+                        "label": null
+                    },
+                    {
+                        "source": "human_review",
+                        "target": "__end__",
+                        "label": null
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "cost_workflow",
+            "uniqueId": "f627579a-71f1-414d-aaff-4d20aa066342",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "question": {
+                        "maxLength": 1200,
+                        "minLength": 1,
+                        "title": "Question",
+                        "type": "string"
+                    },
+                    "provider_ccn": {
+                        "pattern": "^\\d{6}$",
+                        "title": "Provider Ccn",
+                        "type": "string"
+                    },
+                    "apc_code": {
+                        "pattern": "^\\d{4}$",
+                        "title": "Apc Code",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "question",
+                    "provider_ccn",
+                    "apc_code"
+                ]
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "draft": {
+                        "additionalProperties": true,
+                        "title": "Draft",
+                        "type": "object"
+                    },
+                    "tool_trace": {
+                        "items": {
+                            "additionalProperties": true,
+                            "type": "object"
+                        },
+                        "title": "Tool Trace",
+                        "type": "array"
+                    },
+                    "checks": {
+                        "additionalProperties": true,
+                        "title": "Checks",
+                        "type": "object"
+                    },
+                    "routing": {
+                        "additionalProperties": true,
+                        "title": "Routing",
+                        "type": "object"
+                    },
+                    "status": {
+                        "default": "pending",
+                        "title": "Status",
+                        "type": "string"
+                    },
+                    "review": {
+                        "additionalProperties": true,
+                        "title": "Review",
+                        "type": "object"
+                    },
+                    "approved_response": {
+                        "type": "string"
+                    }
+                },
+                "required": []
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "__start__",
+                        "name": "__start__",
+                        "type": "__start__",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "investigate",
+                        "name": "investigate",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "check_evidence",
+                        "name": "check_evidence",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "human_review",
+                        "name": "human_review",
+                        "type": "node",
+                        "subgraph": null,
+                        "metadata": {}
+                    },
+                    {
+                        "id": "__end__",
+                        "name": "__end__",
+                        "type": "__end__",
+                        "subgraph": null,
+                        "metadata": {}
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "__start__",
+                        "target": "investigate",
+                        "label": null
+                    },
+                    {
+                        "source": "check_evidence",
+                        "target": "human_review",
+                        "label": null
+                    },
+                    {
+                        "source": "investigate",
+                        "target": "check_evidence",
+                        "label": null
+                    },
+                    {
+                        "source": "human_review",
+                        "target": "__end__",
+                        "label": null
+                    }
+                ]
+            }
+        }
+    ]
+}

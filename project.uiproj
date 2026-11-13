@@ -1,0 +1,6 @@
+{
+  "ProjectType": "Agent",
+  "Name": "revenue-cycle-agent",
+  "Description": "Synthetic billing inbox agent adapted from Google and UiPath samples",
+  "MainFile": null
+}

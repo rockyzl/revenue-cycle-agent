@@ -1,0 +1,38 @@
+{
+  "$schema": "https://cloud.uipath.com/draft/2024-12/uipath",
+  "runtimeOptions": {
+    "isConversational": false
+  },
+  "packOptions": {
+    "fileExtensionsIncluded": [
+      ".json",
+      ".html",
+      ".css",
+      ".js"
+    ],
+    "filesIncluded": [
+      "THIRD_PARTY_NOTICES.txt",
+      "PROVENANCE.md"
+    ],
+    "filesExcluded": [
+      ".env",
+      ".env.*"
+    ],
+    "directoriesExcluded": [
+      "references",
+      "tests",
+      ".git",
+      ".venv",
+      "artifacts",
+      ".agents",
+      "scripts",
+      "__uipath",
+      ".github",
+      ".agent"
+    ],
+    "includeUvLock": true
+  },
+  "functions": {},
+  "agents": {},
+  "id": "1b6cb7cc-cfe8-4eb9-bf2b-ca678978bdad"
+}

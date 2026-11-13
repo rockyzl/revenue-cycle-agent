@@ -1,0 +1,12 @@
+*
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!README.md
+!THIRD_PARTY_NOTICES.txt
+!PROVENANCE.md
+!app/
+!app/**
+**/__pycache__
+**/*.pyc
+**/.env*

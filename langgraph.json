@@ -1,0 +1,10 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "billing_workflow": "./app/workflow.py:graph",
+    "cost_workflow": "./app/cost_workflow.py:graph"
+  },
+  "python_version": "3.12"
+}

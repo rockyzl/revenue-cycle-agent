@@ -1,0 +1,500 @@
+{
+  "at": "2026-11-13T20:11:57.303289+00:00",
+  "mode": "vertex",
+  "model": "gemini-3.8-flash",
+  "data": "Live CMS API; 2024 public hospital/service aggregates",
+  "scope": "Six hand-authored smoke cases, not a production quality estimate or semantic validation.",
+  "passed": 6,
+  "cases": 6,
+  "results": [
+    {
+      "case_id": "explain",
+      "passed": true,
+      "state": {
+        "question": "Explain the difference between submitted charges, allowed amount and Medicare payment for this service.",
+        "provider_ccn": "240010",
+        "apc_code": "5072",
+        "draft": {
+          "intent": "charges_explained",
+          "summary": "Explanation of 2024 CMS submitted charges, allowed amount, and Medicare payment averages for APC 5072 at Mayo Clinic Hospital Rochester.",
+          "response": "For Mayo Clinic Hospital Rochester (APC 5072, Level 2 Excision/Biopsy/Incision and Drainage), CMS reports 2024 historical averages, not a patient bill, quote, or coverage decision:\n\n\u2022 Average Submitted Charge ($7,825.60): The average estimated hospital charge submitted for services under this APC; this is not what a patient owes.\n\u2022 Average Medicare Allowed Amount ($1,618.39): The total average regular payment received, combining Medicare's portion and beneficiary copayments or deductibles.\n\u2022 Average Medicare Payment ($1,280.16): The average regular payment paid directly by Medicare (excluding separately reported outliers).\n\nThese figures reflect historical 2024 aggregate data. An individual's out-of-pocket liability cannot be derived by subtracting these averages.",
+          "evidence_ids": [
+            "cms:2024:240010:5072",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [],
+          "needs_specialist": false
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "provider_ccn": "240010",
+              "apc_code": "5072"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:5072",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:10:26.190969+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "5072",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": true,
+              "provider": "Mayo Clinic Hospital Rochester",
+              "service": "Level 2 Excision/ Biopsy/ Incision and Drainage",
+              "city": "Rochester",
+              "state": "MN",
+              "beneficiaries": "2105",
+              "services": "2366",
+              "average_submitted_charge": "7825.60",
+              "average_medicare_allowed": "1618.39",
+              "average_medicare_payment": "1280.16"
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Response reviewer",
+          "reason": "Public historical averages support an explanatory draft; staff must review it."
+        },
+        "status": "awaiting_review"
+      }
+    },
+    {
+      "case_id": "benchmark",
+      "passed": true,
+      "state": {
+        "question": "What historical cost information does CMS report for this hospital and service?",
+        "provider_ccn": "240010",
+        "apc_code": "5113",
+        "draft": {
+          "intent": "benchmark",
+          "summary": "CMS reported 2024 historical average charges and payments for Mayo Clinic Hospital Rochester for APC 5113.",
+          "response": "For Mayo Clinic Hospital Rochester (CCN 240010) and APC 5113 (Level 3 Musculoskeletal Procedures), CMS reports the following historical 2024 hospital/service averages [cms:2024:240010:5113, cms:definitions:v1]:\n\n\u2022 Average Submitted Charge: $15,722.99 (average hospital charge submitted, not what a patient owes or a current chargemaster price).\n\u2022 Average Medicare Allowed: $2,749.35 (average regular payment received, combining Medicare and patient responsibility).\n\u2022 Average Medicare Payment: $2,181.78 (average regular payment directly from Medicare).\n\nThese amounts are historical 2024 aggregate averages, not an individual patient bill, current price quote, or insurance coverage decision. Individual out-of-pocket responsibility cannot be determined by subtracting these averages.",
+          "evidence_ids": [
+            "cms:2024:240010:5113",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [],
+          "needs_specialist": false
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "provider_ccn": "240010",
+              "apc_code": "5113"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:5113",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:10:45.828880+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "5113",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": true,
+              "provider": "Mayo Clinic Hospital Rochester",
+              "service": "Level 3 Musculoskeletal Procedures",
+              "city": "Rochester",
+              "state": "MN",
+              "beneficiaries": "307",
+              "services": "392",
+              "average_submitted_charge": "15722.99",
+              "average_medicare_allowed": "2749.35",
+              "average_medicare_payment": "2181.78"
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Response reviewer",
+          "reason": "Public historical averages support an explanatory draft; staff must review it."
+        },
+        "status": "awaiting_review"
+      }
+    },
+    {
+      "case_id": "personal",
+      "passed": true,
+      "state": {
+        "question": "Can you tell me exactly how much I personally will owe after Medicare?",
+        "provider_ccn": "240010",
+        "apc_code": "5072",
+        "draft": {
+          "intent": "personal_estimate",
+          "summary": "Inquiry classified as a personal estimate. Historical 2024 CMS averages provided; personal out-of-pocket liability cannot be calculated from aggregate data. Specialist review recommended.",
+          "response": "We cannot provide an exact personal out-of-pocket amount. The available CMS data reflect historical 2024 hospital averages for Mayo Clinic Hospital Rochester (APC 5072), not a personal bill, current price quote, or coverage decision [cms:2024:240010:5072]. For 2024, the hospital's average submitted charge was $7,825.60, the average Medicare allowed amount was $1,618.39, and the average Medicare payment was $1,280.16 [cms:2024:240010:5072]. Personal liability cannot be derived by subtracting these averages [cms:definitions:v1].\n\nYour actual out-of-pocket cost depends on your specific clinical service, current Medicare Part B deductible status, and any supplemental or secondary coverage. A billing specialist review should be requested to obtain a personalized estimate.",
+          "evidence_ids": [
+            "cms:2024:240010:5072",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [
+            "Patient's specific Medicare Part B deductible and coinsurance status",
+            "Supplemental or secondary insurance (e.g., Medigap) details",
+            "Specific scheduled procedure codes (CPT/HCPCS) and date of service"
+          ],
+          "needs_specialist": true
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "apc_code": "5072",
+              "provider_ccn": "240010"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:5072",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:10:55.070461+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "5072",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": true,
+              "provider": "Mayo Clinic Hospital Rochester",
+              "service": "Level 2 Excision/ Biopsy/ Incision and Drainage",
+              "city": "Rochester",
+              "state": "MN",
+              "beneficiaries": "2105",
+              "services": "2366",
+              "average_submitted_charge": "7825.60",
+              "average_medicare_allowed": "1618.39",
+              "average_medicare_payment": "1280.16"
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Cost specialist",
+          "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+        },
+        "status": "awaiting_review"
+      }
+    },
+    {
+      "case_id": "dispute",
+      "passed": true,
+      "state": {
+        "question": "My bill seems higher than this benchmark. Does that prove an incorrect charge, and what should I gather for staff review?",
+        "provider_ccn": "240010",
+        "apc_code": "5073",
+        "draft": {
+          "intent": "dispute",
+          "summary": "Clarified that 2024 CMS averages do not establish billing errors and outlined the documentation required for specialist dispute review.",
+          "response": "A bill higher than this benchmark does not prove an incorrect charge. For APC 5073 at Mayo Clinic Hospital Rochester (CCN 240010), 2024 CMS data show historical hospital averages: an average submitted charge of $12,726.21, an average Medicare allowed amount of $2,855.43, and an average Medicare payment of $2,268.85 [cms:2024:240010:5073]. These aggregate statistics are not personal bills, current price quotes, or coverage determinations [cms:definitions:v1]. Actual patient charges depend on the specific services rendered, coding, and payer contracts.\n\nTo facilitate a billing specialist review, you would need to gather:\n- An itemized bill showing specific procedure/revenue codes\n- Your insurer's Explanation of Benefits (EOB)\n- Insurance coverage details\n- Date of service and account number\n\nA revenue-cycle specialist would need to review these account-specific documents.",
+          "evidence_ids": [
+            "cms:2024:240010:5073",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [
+            "Itemized hospital bill with CPT/HCPCS procedure codes",
+            "Explanation of Benefits (EOB) from insurer",
+            "Insurance plan and coverage details",
+            "Date of service and patient account number"
+          ],
+          "needs_specialist": true
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "provider_ccn": "240010",
+              "apc_code": "5073"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:5073",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:11:07.009622+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "5073",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": true,
+              "provider": "Mayo Clinic Hospital Rochester",
+              "service": "Level 3 Excision/ Biopsy/ Incision and Drainage",
+              "city": "Rochester",
+              "state": "MN",
+              "beneficiaries": "1450",
+              "services": "1785",
+              "average_submitted_charge": "12726.21",
+              "average_medicare_allowed": "2855.43",
+              "average_medicare_payment": "2268.85"
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Cost specialist",
+          "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+        },
+        "status": "awaiting_review"
+      }
+    },
+    {
+      "case_id": "unavailable",
+      "passed": true,
+      "state": {
+        "question": "What does CMS report for this service? If an amount is blank, does that mean the service is free?",
+        "provider_ccn": "240010",
+        "apc_code": "5200",
+        "draft": {
+          "intent": "charges_explained",
+          "summary": "CMS reports blank 2024 averages for APC 5200 at CCN 240010, which indicates unavailable data rather than a free service.",
+          "response": "For Mayo Clinic Hospital Rochester (CCN 240010) and APC 5200 (Implantation Wireless PA Pressure Monitor), the 2024 CMS data reports blank values for average submitted charges, average Medicare payments, and average Medicare allowed amounts [cms:2024:240010:5200].\n\nA blank value does not mean the service is free. In CMS public reporting, blank or suppressed cells mean the data is unavailable, never zero [cms:definitions:v1]. \n\nThese figures represent historical 2024 hospital-level averages, not a personalized bill, current price quote, or insurance coverage decision [cms:definitions:v1]. To obtain an individualized cost estimate, a patient would need to contact the facility or their health plan directly.",
+          "evidence_ids": [
+            "cms:2024:240010:5200",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [],
+          "needs_specialist": true
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "provider_ccn": "240010",
+              "apc_code": "5200"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:5200",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:11:18.821117+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "5200",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": true,
+              "provider": "Mayo Clinic Hospital Rochester",
+              "service": "Implantation Wireless PA Pressure Monitor",
+              "city": "Rochester",
+              "state": "MN",
+              "beneficiaries": null,
+              "services": null,
+              "average_submitted_charge": null,
+              "average_medicare_allowed": null,
+              "average_medicare_payment": null
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Cost specialist",
+          "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+        },
+        "status": "awaiting_review"
+      }
+    },
+    {
+      "case_id": "missing",
+      "passed": true,
+      "state": {
+        "question": "Find the historical costs for this provider and service code, and explain what to do if there is no row.",
+        "provider_ccn": "240010",
+        "apc_code": "0000",
+        "draft": {
+          "intent": "benchmark",
+          "summary": "No CMS data row found for provider 240010 and APC code 0000 in the 2024 dataset.",
+          "response": "No 2024 CMS aggregate cost data row was found for provider CCN 240010 and APC code 0000 (source: cms:2024:240010:0000). In the 2024 dataset, absent rows mean data is unavailable\u2014not zero. This typically occurs if the code is invalid, the hospital did not perform the service under Medicare outpatient billing, or service volume was suppressed for privacy (source: cms:definitions:v1).\n\nIf no row is found, staff should confirm the specific HCPCS/APC procedure code and provider CCN. If an actual cost estimate is needed, the inquiry would need to be directed to hospital financial counseling or billing staff to check the current chargemaster or verify patient-specific insurance coverage. These CMS metrics represent historical 2024 averages, not individual quotes or bills.",
+          "evidence_ids": [
+            "cms:2024:240010:0000",
+            "cms:definitions:v1"
+          ],
+          "missing_information": [
+            "Valid APC or HCPCS service code",
+            "Patient insurance details if seeking an individual quote"
+          ],
+          "needs_specialist": true
+        },
+        "tool_trace": [
+          {
+            "tool": "lookup_cms_costs",
+            "input": {
+              "apc_code": "0000",
+              "provider_ccn": "240010"
+            },
+            "output": {
+              "source_id": "cms:2024:240010:0000",
+              "source_url": "https://data.cms.gov/data-api/v1/dataset/771e94a2-cd8f-4702-a9d7-8f777f363938/data?size=100&filter%5BRndrng_Prvdr_CCN%5D=240010",
+              "dataset_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-outpatient-hospitals/medicare-outpatient-hospitals-by-provider-and-service",
+              "data_year": 2024,
+              "retrieved_at": "2026-11-13T20:11:48.697740+00:00",
+              "provider_ccn": "240010",
+              "apc_code": "0000",
+              "data_kind": "Real public hospital/service aggregates; not patient-level data",
+              "found": false
+            }
+          },
+          {
+            "tool": "get_cost_definitions",
+            "input": {},
+            "output": {
+              "source_id": "cms:definitions:v1",
+              "source_url": "https://data.cms.gov/sites/default/files/2020-12/Medicare%20Outpatient%20Hospitals%20-%20by%20Provider%20and%20Service%20Data%20Dictionary.pdf",
+              "definitions": {
+                "average_submitted_charge": "Average estimated hospital charge submitted for services covered by the APC; not what a patient owes.",
+                "average_medicare_allowed": "Average regular payment received, including Medicare payment and beneficiary copayment/deductible; excludes separately reported outlier payments.",
+                "average_medicare_payment": "Average regular payment directly from Medicare; excludes separately reported outlier payments."
+              },
+              "project_rules": [
+                "These are historical 2024 aggregates, not current quotes or patient balances.",
+                "Never calculate a person's liability from the difference between two averages.",
+                "Blank or absent CMS values are unavailable, not zero.",
+                "Personal estimates need the actual service details, insurance benefits and provider estimate; request staff review.",
+                "Drafts require human review. No email, referral, claim, refund or payment action is performed."
+              ]
+            }
+          }
+        ],
+        "checks": {
+          "tools_completed": true,
+          "reference_ids": true,
+          "quoted_amounts_match": true,
+          "historical_year_stated": true,
+          "human_review_required": true
+        },
+        "routing": {
+          "queue": "Cost specialist",
+          "reason": "This inquiry needs case-specific information, unavailable data, or specialist judgment."
+        },
+        "status": "awaiting_review"
+      }
+    }
+  ]
+}
