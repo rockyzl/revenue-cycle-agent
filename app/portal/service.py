@@ -24,10 +24,10 @@ def audit(store, principal, action, resource, allowed):
 def resolve_identity(store, claims):
     issuer, subject = claims.get('iss'), claims.get('sub')
     if not issuer or not subject:
-        raise HTTPException(401, '登录身份无效，请重新登录。')
+        raise HTTPException(401, 'Invalid identity. Please sign in again.')
     link = store.get('identity_links', identity_key(issuer, subject))
     if not link or link.get('issuer') != issuer or link.get('subject') != subject:
-        raise HTTPException(403, '这个登录身份尚未关联患者或工作人员账户。')
+        raise HTTPException(403, 'This identity is not linked to a patient or staff account.')
     p = Principal(link['account_id'], issuer, subject)
     account_for(store, p)
     return p
@@ -37,14 +37,14 @@ def account_for(store, principal):
     link = store.get('identity_links', identity_key(principal.issuer, principal.subject))
     account = store.get('accounts', principal.account_id)
     if not link or link.get('account_id') != principal.account_id or not account or not account.get('active'):
-        raise HTTPException(403, '账户或身份关联已停用。')
+        raise HTTPException(403, 'This account or identity link has been disabled.')
     return account
 
 
 def require_role(store, principal, role):
     account = account_for(store, principal)
     if account.get('role') != role:
-        raise HTTPException(403, '当前账户没有执行此操作的权限。')
+        raise HTTPException(403, 'This account does not have permission to perform this action.')
     return account
 
 
@@ -63,7 +63,7 @@ def authorized_bill(store, principal, bill_id):
     audit(store, principal, 'read_bill', bill_id, allowed)
     if not allowed:
         # Same response for missing and unauthorized records; no existence oracle.
-        raise HTTPException(404, '未找到可访问的账单。')
+        raise HTTPException(404, 'No accessible bill was found.')
     return bill
 
 
@@ -83,7 +83,7 @@ def visible_inquiry(store, principal, inquiry_id):
     allowed = bool(row and ((account['role'] == 'patient' and row['account_id'] == principal.account_id and has_patient_access(store, principal, row['patient_id'])) or (account['role'] == 'reviewer' and row.get('reviewer_id') == principal.account_id)))
     if not allowed:
         audit(store, principal, 'read_inquiry', inquiry_id, False)
-        raise HTTPException(404, '未找到可访问的咨询。')
+        raise HTTPException(404, 'No accessible inquiry was found.')
     return row
 
 

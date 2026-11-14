@@ -616,21 +616,21 @@
           "fields": [
             {
               "id": "question",
-              "label": "患者消息（虚构演示）",
+              "label": "Patient question (fictional demo)",
               "type": "string",
               "direction": "input",
               "binding": "vars.prepareDraft.output.body.message"
             },
             {
               "id": "evidence",
-              "label": "账单、保险记录与检查结果",
+              "label": "Billing records, insurance events and checks",
               "type": "string",
               "direction": "input",
               "binding": "vars.prepareDraft.output.body.evidence"
             },
             {
               "id": "approvedReply",
-              "label": "审核后回复",
+              "label": "Reviewed reply",
               "type": "string",
               "direction": "inOut",
               "binding": "vars.prepareDraft.output.body.reply",

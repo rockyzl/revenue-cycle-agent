@@ -10,7 +10,7 @@ An independent learning prototype for patient-portal billing messages. The cloud
 
 1. Choose **Anna** on the login screen. The public demo account signs in through Google Cloud Identity Platform.
 2. Select a bill and send the prefilled question: insurance paid but a balance remains, or a statement arrived after payment.
-3. Switch to **财务审核员** (financial reviewer). Inspect the agent's two tool calls, evidence and draft. Edit the draft, then approve or reject.
+3. Switch to **Financial reviewer**. Inspect the agent's two tool calls, evidence and draft. Edit the draft, then approve or reject.
 4. Switch back to Anna. Only an approved reply appears. A rejection sends no draft.
 5. Try the other-patient access button: Anna cannot access Ben's bill. Anna can access an explicitly authorized child's bill.
 

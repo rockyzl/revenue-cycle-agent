@@ -110,26 +110,26 @@ async def create_inquiry(body: Inquiry, session=Depends(auth.require_session)):
     store = get_store(); p = session[0]
     bill = authorized_bill(store, p, body.bill_id)
     if not os.getenv('MAESTRO_RELEASE_KEY'):
-        raise HTTPException(503, 'Maestro 正在配置，暂未开放新咨询。')
+        raise HTTPException(503, 'The workflow is being configured. New inquiries are not available yet.')
     key = digest(p.account_id + ':' + body.request_id)
     old = store.get('requests', key)
     if old:
         row = visible_inquiry(store, p, old['inquiry_id'])
         if row['bill_id'] != body.bill_id or row['message'] != body.message:
-            raise HTTPException(409, '请求编号已经用于其他内容。')
+            raise HTTPException(409, 'This request ID has already been used for different content.')
         return public_row(row, 'patient')
     try:
         reserve_budget(store, 'inquiry-' + p.account_id, 12, 86400)
         reserve_budget(store, 'inquiry-global', 40, 86400)
     except ValueError as exc:
-        raise HTTPException(429, '今天的演示额度已用完。已有咨询仍可查看和审核。') from exc
+        raise HTTPException(429, 'The daily demo limit has been reached. Existing inquiries can still be viewed and reviewed.') from exc
     inquiry_id = uuid4().hex; worker_token = secrets.token_urlsafe(32); now = time.time()
     row = {'id': inquiry_id, 'bill_id': bill['id'], 'patient_id': bill['patient_id'], 'account_id': p.account_id, 'principal': asdict(p), 'reviewer_id': 'reviewer', 'message': body.message, 'status': 'starting', 'created_at': now, 'updated_at': now, 'worker_hash': digest(worker_token), 'worker_expires': now + 86400}
     # Atomic uniqueness claim prevents duplicate submissions from starting two jobs.
     try:
         store.create('requests', key, {'inquiry_id': inquiry_id})
     except Exception as exc:
-        raise HTTPException(409, '这个请求正在提交，请稍后刷新。') from exc
+        raise HTTPException(409, 'This request is being submitted. Please refresh shortly.') from exc
     store.create('inquiries', inquiry_id, row)
     try:
         job = await uipath.start(inquiry_id, worker_token)
@@ -137,8 +137,8 @@ async def create_inquiry(body: Inquiry, session=Depends(auth.require_session)):
             return {**current, 'job_key': job['job_key'], 'status': 'queued' if current['status'] == 'starting' else current['status'], 'updated_at': time.time()}
         row = store.change('inquiries', inquiry_id, started)
     except Exception as exc:
-        store.change('inquiries', inquiry_id, lambda x: {**x, 'status': 'failed', 'error': 'Maestro 未能启动；未生成或发送回复。', 'updated_at': time.time()})
-        raise HTTPException(502, 'Maestro 启动失败，咨询已保留。') from exc
+        store.change('inquiries', inquiry_id, lambda x: {**x, 'status': 'failed', 'error': 'Maestro could not start. No reply was generated or sent.', 'updated_at': time.time()})
+        raise HTTPException(502, 'Maestro could not start. Your inquiry has been saved.') from exc
     audit(store, p, 'submit_inquiry', inquiry_id, True)
     return public_row(row, 'patient')
 
@@ -149,7 +149,7 @@ async def review(inquiry_id: str, body: Review, session=Depends(auth.require_ses
     require_role(store, p, 'reviewer')
     row = visible_inquiry(store, p, inquiry_id)
     if row['status'] != 'awaiting_review':
-        raise HTTPException(409, '当前咨询还不能审核或已处理。')
+        raise HTTPException(409, 'This inquiry is not ready for review or has already been processed.')
     # Also re-check the patient's current grant before releasing any content.
     authorized_bill(store, Principal(**row['principal']), row['bill_id'])
     task_id = await uipath.complete_task(inquiry_id, row['job_key'], body.decision, body.reply)
@@ -184,7 +184,7 @@ async def prepare_draft(inquiry_id: str, request: Request):
         row = store.change('inquiries', inquiry_id, lambda x: {**x, **{k: result[k] for k in ('draft', 'trace', 'checks')}, 'status': 'awaiting_review', 'updated_at': time.time()})
         return {'reply': row['draft']['response'], 'evidence': json_evidence(row), 'message': row['message']}
     except Exception as exc:
-        store.change('inquiries', inquiry_id, lambda x: {**x, 'status': 'failed', 'error': 'AI 或权限核对失败，未生成可发布回复。', 'updated_at': time.time()})
+        store.change('inquiries', inquiry_id, lambda x: {**x, 'status': 'failed', 'error': 'The AI or access check failed. No publishable reply was generated.', 'updated_at': time.time()})
         raise HTTPException(502, 'Draft preparation failed') from exc
 
 
