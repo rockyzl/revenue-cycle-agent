@@ -43,3 +43,12 @@ The pre-existing user inquiry `1a83af99e4cc49b6a484507be30ab460` remained awaiti
 Desktop 1440 px and mobile 390 px screenshots were inspected; mobile document width remained 390 px. No UiPath administrative links or interview-note panel were present. A cached copy of the old JavaScript was discovered during browser verification; the HTML now requests a versioned script URL so returning visitors load the English interface. The existing unit/integration suite passed again: **35 tests**. CI passed for the English implementation: https://github.com/rockyzl/revenue-cycle-agent/actions/runs/43561825478.
 
 The cache fix is deployed in revision `revenue-cycle-agent-00008-hc7` (image `20261114-en2`, implementation commit `1d65d6b`). Cloud Build and GitHub CI succeeded. This revision changes only the script URL from the English runtime check above.
+
+
+## Historical English display — 2026-11-14
+
+At the user's request, 26 exact historical Chinese strings now have reviewed English display translations. This covers all six current inquiries, including questions, drafts, approved replies and evidence fields. Translation is applied after the existing API role filter; original Firestore and UiPath history remains intact. Rejected drafts remain rejected, including the previously recorded unsupported referral statement. No review decisions, record values or permissions were changed.
+
+On revision `revenue-cycle-agent-00009-7ks` (image `20261114-history1`, commit `2dc9c47`), browser checks found no Chinese text in the current Anna, Ben or reviewer views, including all expanded evidence and reviewer textareas. Patient views exposed no draft textareas. The existing pending inquiry remained waiting for review. The reviewer now receives instructions to edit/approve/reject directly, while patient instructions still explain role switching. The original 35 tests passed; direct public-row checks confirmed all six records translate without modifying inputs or exposing drafts to patients. GitHub CI: https://github.com/rockyzl/revenue-cycle-agent/actions/runs/43618909604.
+
+These exact historical translations do not automatically translate arbitrary new user input. New model replies and supplied sample questions remain English.
