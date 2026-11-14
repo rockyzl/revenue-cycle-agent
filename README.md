@@ -14,7 +14,7 @@ An independent learning prototype for patient-portal billing messages. The cloud
 4. Switch back to Anna. Only an approved reply appears. A rejection sends no draft.
 5. Try the other-patient access button: Anna cannot access Ben's bill. Anna can access an explicitly authorized child's bill.
 
-Complete the entire demo on this page; no separate UiPath console login is needed. “Waiting for staff review” means the draft is ready for the Financial reviewer. The interface, sample questions and new drafts use English; earlier conversations retain their original wording.
+Complete the entire demo on this page; no separate UiPath console login is needed. “Waiting for staff review” means the draft is ready for the Financial reviewer. The interface, sample questions and new drafts use English; earlier demo conversations are displayed using reviewed English translations while their original stored records remain intact.
 
 All three accounts have public demo passwords shown on screen. They separate roles for demonstration; they are not private accounts or proof of a real person's identity. Never enter real patient data. Staff clicks actually complete Action Center tasks through the backend API.
 

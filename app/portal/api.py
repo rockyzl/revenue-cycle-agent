@@ -12,6 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from . import agent, auth, uipath
 from .fixtures import DEMO_ACCOUNTS
+from .display import english_history
 from .service import Principal, account_for, authorized_bill, list_bills, visible_inquiry, require_role, audit, digest
 from .store import get_store, reserve_budget
 
@@ -44,7 +45,7 @@ def public_row(row, role):
     safe['workflow'] = 'UiPath Maestro Flow'
     if role == 'reviewer':
         safe.update({k: row.get(k) for k in ('draft', 'trace', 'checks', 'review', 'task_id', 'error')})
-    return safe
+    return english_history(safe)
 
 
 @router.get('/config')
