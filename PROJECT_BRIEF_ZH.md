@@ -13,6 +13,8 @@
 5. 再换回 Anna，才能看到审核后的回复。想演示失败分支，用 Ben 的“Possible duplicate lab charge”问题，审核员点击拒绝；患者不会收到 AI 草稿。
 6. 点“Try accessing another patient’s bill”，系统会拒绝。Anna 的家属账单有单独授权，因此可以查看。
 
+整个演示都在同一个网页完成，不需要另行登录 UiPath 后台。看到“Waiting for staff review”，就表示草稿在等财务审核员批准。真实医院里患者和审核员是两个人；这个 demo 让你切换账户体验两种角色。
+
 ## 用一件事记住各工具
 
 | 工具 | 在这个例子里干什么 |

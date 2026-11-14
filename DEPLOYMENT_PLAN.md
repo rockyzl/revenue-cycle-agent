@@ -36,8 +36,8 @@ uip maestro flow validate PatientInbox.flow
 uip maestro flow format PatientInbox.flow
 # From the repository root:
 uip solution resources refresh --solution-folder RevenueCycle
-uip solution pack RevenueCycle artifacts/maestro-package --version 0.3.0
-uip solution publish artifacts/maestro-package/RevenueCycle_0.3.0.zip
+uip solution pack RevenueCycle artifacts/maestro-package --version 0.3.1
+uip solution publish artifacts/maestro-package/RevenueCycle_0.3.1.zip
 ```
 
 Deploy to a dedicated folder through `uip solution deploy run`, then configure the resulting folder and release GUIDs in Cloud Run. Authenticate the CLI interactively as an authorized developer. Do not copy that personal CLI refresh token into the runtime.

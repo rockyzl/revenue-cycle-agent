@@ -31,3 +31,15 @@ Full debug exports and credentials are excluded from version control. This publi
 
 
 Final browser smoke: v5 revision `revenue-cycle-agent-00006-zgm` served the updated page; role switching loaded Anna's three authorized bills, cross-patient lookup returned the expected denial, and the previously approved reply survived redeployment. The session was logged out after verification. GitHub CI passed on implementation commit `245a4a7c8a46230140f793b1c732543416a69b28`: https://github.com/rockyzl/revenue-cycle-agent/actions/runs/43522867177.
+
+## English interface release — November 13 evening (November 14 UTC)
+
+The portal, sample questions, new model drafts and Action Center form labels now use English. Existing messages and approved responses retain their original wording. The public page no longer includes the interview notes or the UiPath administrative console link. These removals do not change authentication, permissions or review requirements.
+
+RevenueCycle 0.3.1 successfully upgraded the existing Maestro deployment, preserving its folder and release key. On Cloud Run revision `revenue-cycle-agent-00007-nss`, a new English A101 inquiry (`ef08f729a3c14c5a8ab2972ce4536e34`) called both authorized tools and passed the reference/amount checks. The draft correctly distinguished the November 5 statement from the November 7 payment and the current $0 balance. Browser automation prefixed the reply with `[Demo verification]` and approved Action Center task `100322451`. Maestro job `f907d354-333a-4be2-9e97-922d692e8015` completed, including staffReview, publishReply and end. Anna then received the edited English reply. This was an automated engineering check, not Lu's independent human review.
+
+The pre-existing user inquiry `1a83af99e4cc49b6a484507be30ab460` remained awaiting review. No existing inquiry, permission or session was reseeded. Only known fixture text and account display names were translated in Firestore.
+
+Desktop 1440 px and mobile 390 px screenshots were inspected; mobile document width remained 390 px. No UiPath administrative links or interview-note panel were present. A cached copy of the old JavaScript was discovered during browser verification; the HTML now requests a versioned script URL so returning visitors load the English interface. The existing unit/integration suite passed again: **35 tests**. CI passed for the English implementation: https://github.com/rockyzl/revenue-cycle-agent/actions/runs/43561825478.
+
+The cache fix is deployed in revision `revenue-cycle-agent-00008-hc7` (image `20261114-en2`, implementation commit `1d65d6b`). Cloud Build and GitHub CI succeeded. This revision changes only the script URL from the English runtime check above.
