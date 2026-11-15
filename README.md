@@ -1,4 +1,4 @@
-# Patient Inbox Agent — Revenue Cycle Demo
+# Revenue Cycle Lab — two working demonstrations
 
 **A patient asks about a bill; an AI agent checks authorized records; a staff reviewer decides what is sent back.**
 
@@ -6,9 +6,15 @@
 
 An independent learning prototype for patient-portal billing messages. The cloud identity service, database, Vertex AI calls and UiPath Maestro workflow are live. **Patients, individual bills, insurance events and portal questions are fictional.** This project has no affiliation with Mayo Clinic and no connection to a hospital EHR or patient messaging system.
 
-## Try it
+## One entrance, two demonstrations
 
-1. Choose **Anna** on the login screen. The public demo account signs in through Google Cloud Identity Platform.
+The [homepage](https://revenue-cycle-agent-1038659864130.us-central1.run.app) links to [Patient billing](https://revenue-cycle-agent-1038659864130.us-central1.run.app/billing) at `/billing` and the FHIR / SQL Server / Oracle workspace at `/integration`. The integration API and real databases are maintained in [healthcare-integration-lab](https://github.com/rockyzl/healthcare-integration-lab); this repository serves its UI and bounded private-service gateway.
+
+The shared visual design was researched from NHS, Carbon and Linear guidance and created with Paper MCP. See [design research and exported layouts](docs/design/research.md).
+
+## Try the patient billing demo
+
+1. Open **Patient billing**, then choose **Anna** on the login screen. The public demo account signs in through Google Cloud Identity Platform.
 2. Select a bill and send the prefilled question: insurance paid but a balance remains, or a statement arrived after payment.
 3. Switch to **Financial reviewer**. Inspect the agent's two tool calls, evidence and draft. Edit the draft, then approve or reject.
 4. Switch back to Anna. Only an approved reply appears. A rejection sends no draft.
@@ -54,7 +60,7 @@ LangGraph can also orchestrate durable human-in-the-loop work. This division dem
 
 ## Verification and limits
 
-Run `uv run pytest tests/unit tests/integration -q`. The current suite has **35 passing checks**, including identity mapping, cross-patient denial, proxy revocation between tool calls, role/CSRF boundaries, scoped callbacks, idempotency, modern-folder task matching and withholding replies until the Maestro callback.
+Run `uv run pytest tests/unit tests/integration -q`. The current suite has **37 passing checks**, including identity mapping, cross-patient denial, proxy revocation between tool calls, role/CSRF boundaries, scoped callbacks, idempotency, modern-folder task matching and withholding replies until the Maestro callback.
 
 Cloud runtime verification is recorded in `docs/verification-2026-11-13.md`. Test decisions made through automation are labeled as verification, not independent human review. Numeric and citation checks are bounded checks; they do not prove every statement is correct or establish clinical validity.
 

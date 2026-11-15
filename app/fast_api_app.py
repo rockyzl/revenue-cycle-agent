@@ -45,6 +45,7 @@ from app.app_utils.a2a import add_a2a_routes
 from app.app_utils.telemetry import setup_telemetry
 from app.cost_api import router as cost_router
 from app.portal.api import router as portal_router
+from app.integration_api import router as integration_router
 from app.workflow import GraphInput, ReviewDecision, demo_graph
 
 # Optional upstream telemetry; off for this small local prototype. The current
@@ -67,6 +68,7 @@ app = FastAPI(
 )
 app.include_router(cost_router)
 app.include_router(portal_router)
+app.include_router(integration_router)
 
 
 @app.middleware("http")
@@ -100,7 +102,17 @@ _sessions: dict[str, asyncio.Lock] = {}
 
 @app.get("/", response_class=HTMLResponse)
 def demo_page():
+    return (Path(__file__).parent / "static" / "home.html").read_text()
+
+
+@app.get("/billing", response_class=HTMLResponse)
+def billing_page():
     return (Path(__file__).parent / "static" / "portal.html").read_text()
+
+
+@app.get("/integration", response_class=HTMLResponse)
+def integration_page():
+    return (Path(__file__).parent / "static" / "integration.html").read_text()
 
 
 @app.get("/cms", response_class=HTMLResponse)
