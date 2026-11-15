@@ -18,3 +18,9 @@ Detailed cloud evidence is in the [integration repository](https://github.com/ro
 ## Cloud deployment
 
 The existing Cloud Run service connects to the dedicated VM over Direct VPC egress. Environment/secret bindings for the original Identity Platform, Firestore, Vertex and UiPath integrations are preserved. The model was not changed. See [database deployment and cost notes](https://github.com/rockyzl/healthcare-integration-lab/blob/main/docs/cloud/deployment.md).
+
+## Public-site browser validation
+
+The canonical public URL was exercised in Chromium after migration: source import, actual Vertex draft, shared review and reload; Anna account sign-in, cross-patient access denial, real Maestro task, Action Center approval, and approved reply back in the patient role. Reviewer edits were captured in the actual review request and confirmed in the delivered reply. Desktop and 390px mobile had no script errors or horizontal overflow. See [browser report](design/live-browser-check.json).
+
+The final check also exposed an edit-loss edge case during refresh. Unsaved reviewer text is now retained across manual/poll refreshes and cleared on logout or completion. The focused browser regression in `tests/browser/review_refresh.py` uses mocked portal responses to change the server snapshot and verifies the edited text survives repeated refresh. Run it against a running app with Playwright and optional `CHROMIUM_EXECUTABLE` / `DEMO_URL`.

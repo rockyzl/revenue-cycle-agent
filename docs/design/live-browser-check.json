@@ -1,0 +1,23 @@
+{
+  "base": "https://revenue-cycle-agent-1038659864130.us-central1.run.app",
+  "integration_import_model_review_reload": true,
+  "billing_uipath_review_and_patient_reply": true,
+  "cross_patient_denial": true,
+  "inquiry_id": "5e4c332134504276a5e44cf39f0096f3",
+  "mobile": [
+    {
+      "page": "home",
+      "horizontal_overflow": false
+    },
+    {
+      "page": "billing",
+      "horizontal_overflow": false
+    },
+    {
+      "page": "integration",
+      "horizontal_overflow": false
+    }
+  ],
+  "browser_errors": [],
+  "checked_at": "2026-11-15T04:56:10Z"
+}
