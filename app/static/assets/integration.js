@@ -7,6 +7,35 @@ let currentPreview = null;
 let currentSnapshot = '';
 let activeTab = 'sources';
 let hasRecords = false;
+let demoPaused = false;
+let availabilityTimer;
+
+function showAvailability(state) {
+  const banner = $('#availability');
+  if (!banner) return;
+  demoPaused = !state.available;
+  document.body.classList.toggle('demo-paused', demoPaused);
+  banner.hidden = !demoPaused && !state.closes_at;
+  $('#availability-links').hidden = !demoPaused;
+  if (demoPaused) {
+    $('#availability-title').textContent = state.code === 'demo_paused' ? 'Service temporarily closed' : 'Service temporarily unavailable';
+    $('#availability-message').textContent = state.message;
+    $('#notice').textContent = '';
+    clearInterval(availabilityTimer);
+  } else if (state.closes_at) {
+    const when = new Date(state.closes_at).toLocaleString('en-US', {
+      month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
+    });
+    $('#availability-title').textContent = 'Live demo open for a limited time';
+    $('#availability-message').textContent = `Available through ${when}. After that, live database operations will pause. You can still view the project and walkthrough.`;
+  }
+}
+
+async function checkAvailability() {
+  const state = await api('/availability');
+  showAvailability(state);
+  return state.available;
+}
 function setTab(tab, focus = false) {
   if (tab !== 'sources' && !hasRecords) return;
   activeTab = tab;
@@ -35,7 +64,13 @@ async function api(path, body) {
   let data;
   try { data = await response.json(); }
   catch { throw Error('The service could not complete this request. Check the database connections and try again.'); }
-  if (!response.ok) throw Error(typeof data.detail === 'string' ? data.detail : 'Check the selected record and enter a question of 5–700 characters.');
+  if (!response.ok) {
+    if (data.detail?.available === false) {
+      showAvailability(data.detail);
+      throw Error(data.detail.message);
+    }
+    throw Error(typeof data.detail === 'string' ? data.detail : 'Check the selected record and enter a question of 5–700 characters.');
+  }
   return data;
 }
 
@@ -159,4 +194,10 @@ $('#run-agent').onclick = () => busy($('#run-agent'), async () => {
   $('#notice').textContent = 'Draft ready. Review the evidence below, then approve or reject.';
   reveal($('#cases'));
 });
-refresh().then(() => { if (hasRecords) setTab('records'); }).catch(error => $('#notice').textContent = error.message);
+async function initialize() {
+  if (!(await checkAvailability())) return;
+  availabilityTimer = setInterval(() => checkAvailability().catch(() => {}), 60000);
+  await refresh();
+  if (hasRecords && !demoPaused) setTab('records');
+}
+initialize().catch(error => $('#notice').textContent = error.message);
